@@ -6,6 +6,19 @@ function toBase64Url(b64) {
   return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
+// UUID generator fallback for non-HTTPS environments
+function generateUUID() {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  // Fallback for HTTP contexts
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
 function MatrixCard() {
   const [step, setStep] = useState(0);
   const [gifSrc, setGifSrc] = useState(null);
@@ -17,7 +30,7 @@ function MatrixCard() {
     setMessage('');
     const payload = {
       signal: `step-${step}`,
-      trace: crypto.randomUUID(),
+      trace: generateUUID(),
       entropy: Math.random().toString(),
       node: 'frontend-node',
       step: step  // Send current step to backend
@@ -49,11 +62,11 @@ function MatrixCard() {
         // Check if all steps are completed
         if (newStep >= TOTAL_STEPS) {
           setCompleted(true);
-          setMessage('🎉 Congratulations! You have escaped the Matrix. Now it\'s time to enter the void...');
+          setMessage('Congratulations! You have escaped the Matrix. Now it\'s time to enter the void...');
         }
 
       } else if (response.status === 429) {
-        setMessage('⏱️ Too many requests. Please wait a moment...');
+        setMessage('Too many requests. Please wait a moment...');
       } else if (response.status === 400) {
         setMessage('Invalid step. Please reload the page.');
       } else {
