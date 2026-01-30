@@ -1,4 +1,4 @@
-# 🎯 Escape The Matrix - Log4Shell CTF Challenge
+# Escape The Matrix - Log4Shell CTF Challenge
 
 <div align="center">
 
@@ -13,15 +13,15 @@
 
 ---
 
-## 📖 Challenge Description
+##  Challenge Description
 
 > *"You find yourself trapped inside the Matrix. To escape, you must solve the puzzle hidden within the cascading code. Click through the sequence of encrypted GIFs to collect fragments that will reveal the path to freedom. But beware—the true exit lies deeper in the void..."*
 
 **Escape The Matrix** is a web exploitation challenge that combines:
-- 🎨 **Immersive Matrix-themed UI** with WebGL rendering
-- 🔍 **Sequential puzzle mechanics** through GIF fragment collection
-- 💣 **Log4Shell (CVE-2021-44228)** vulnerability for RCE
-- 🎭 **Hidden attack vector** discoverable through DOM inspection
+-  **Immersive Matrix-themed UI** with WebGL rendering
+-  **Sequential puzzle mechanics** through GIF fragment collection
+-  **Log4Shell (CVE-2021-44228)** vulnerability for RCE
+-  **Hidden attack vector** discoverable through DOM inspection
 
 ### Challenge Objectives:
 1. Interact with the Matrix UI and collect all 13 GIF fragments
@@ -32,9 +32,9 @@
 
 ---
 
-## 🚀 Quick Start
+##  Quick Start
 
-### 🐳 Docker Deployment (Recommended)
+### Docker Deployment (Recommended)
 
 ```bash
 # Build the Docker image
@@ -47,7 +47,7 @@ docker run -d -p 8080:8080 --name escape-matrix-ctf escape-matrix
 # Open http://localhost:8080 in your browser
 ```
 
-### 🛠️ Manual Setup
+### Manual Setup
 
 #### Prerequisites
 - **Java 8** (JDK 1.8)
@@ -72,7 +72,7 @@ npm run dev
 
 ---
 
-## 🎮 Challenge Walkthrough
+## Challenge Walkthrough
 
 ### Stage 1: Escape the Matrix 🟢
 
@@ -119,7 +119,7 @@ npm run dev
    {"tr4c3":"..","v0id":"..","3ntr0py":"..","n0dE":".."}
    ```
 
-### Stage 3: Enter the Void 🔴
+### Stage 3: Enter the Void 
 
 1. **Test the Hidden Endpoint**
    ```bash
@@ -184,7 +184,7 @@ npm run dev
 
 ---
 
-## 🏗️ Project Structure
+##  Project Structure
 
 ```
 Escape-The-Matrix/
@@ -243,19 +243,18 @@ logger.error("Matrix void signal: {}", payload.getV0id());
 
 ---
 
-## 🎯 Learning Objectives
+##  Learning Objectives
 
-- ✅ Web application reconnaissance and endpoint discovery
-- ✅ HTTP header analysis and base64 encoding
-- ✅ DOM manipulation inspection
-- ✅ Log4j JNDI injection exploitation
-- ✅ LDAP server setup for exploit delivery
-- ✅ Java RCE payload development
-- ✅ CTF-style sequential puzzle solving
+- Web application reconnaissance and endpoint discovery
+-  HTTP header analysis and base64 encoding
+-  DOM manipulation inspection
+-  Log4j JNDI injection exploitation
+-  LDAP server setup for exploit delivery
+-  Java RCE payload development
 
 ---
 
-## 🔧 Configuration
+##  Configuration
 
 ### Environment Variables
 ```bash
@@ -274,7 +273,7 @@ NSC{your_custom_flag_here}
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 - [Log4Shell Explained](https://www.lunasec.io/docs/blog/log4j-zero-day/)
 - [JNDI Injection](https://www.blackhat.com/docs/us-16/materials/us-16-Munoz-A-Journey-From-JNDI-LDAP-Manipulation-To-RCE.pdf)
@@ -287,32 +286,22 @@ NSC{your_custom_flag_here}
 
 **This application is INTENTIONALLY VULNERABLE for educational purposes only.**
 
-- 🚫 **DO NOT** deploy in production environments
-- 🚫 **DO NOT** use on systems you don't own
-- ✅ **ONLY** use in isolated CTF/lab environments
-- ✅ **ALWAYS** run in Docker containers or VMs
+- **DO NOT** deploy in production environments
+-  **DO NOT** use on systems you don't own
+-  **ONLY** use in isolated CTF/lab environments
+-  **ALWAYS** run in Docker containers or VMs
 
 ---
 
-## 👥 Credits
+## Credits
 
-- **Challenge Design**: [Your Name/Team]
+- **Challenge Design**: Azzaoui Mohamed Omar
 - **Matrix UI**: WebGL shader implementation
 - **Vulnerability**: CVE-2021-44228 (Log4Shell)
 
 ---
 
-## 📝 License
+##  License
 
 This project is for educational purposes only. Use responsibly.
-
----
-
-<div align="center">
-
-**Ready to escape the Matrix? 🟢💊**
-
-*"There is no spoon... only JNDI lookups."*
-
-</div>
 
