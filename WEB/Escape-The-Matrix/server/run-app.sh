@@ -1,5 +1,6 @@
 #!/bin/bash
 
-sudo docker build -t escape-matrix .
+docker build -t escape-the-matrix .
 
-sudo 
+# Run the container
+docker run -p 8080:8080 escape-the-matrix escape-matrix-diagonalhh

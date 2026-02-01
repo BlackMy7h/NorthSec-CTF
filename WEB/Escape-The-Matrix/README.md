@@ -44,7 +44,7 @@ Frontend (Port 5173) → Backend (Port 8080) → GIF Assets
 docker build -t escape-the-matrix .
 
 # Run the container
-docker run -p 8080:8080 escape-the-matrix
+docker run -p 8080:8080 escape-the-matrix escape-matrix-diagonalhh
 
 #Proper Deployement (Immune to Garbage HTTP methods,Random scanners, Invalid ,JSON TLS-on-HTTP ,noise,Reboots,JVM OOM crashes)
 docker run \
