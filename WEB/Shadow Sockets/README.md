@@ -136,8 +136,6 @@ Visit `http://localhost:5000/admin`
 
 #### Step 5: Access Internal API
 
-**Important:** Visit 3+ different pages first (dashboard, robots.txt, .git/config)
-
 ```bash
 curl http://localhost:5000/api/internal/status
 ```
