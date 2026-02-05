@@ -79,7 +79,7 @@ FLAG FORMAT: NSC{...}
 
 ## 🔍 Complete Solution Walkthrough
 
-### Stage 1: Initial Reconnaissance (30-45 min)
+### Stage 1: Initial Reconnaissance
 
 #### Step 1: Explore the Dashboard
 
@@ -114,7 +114,7 @@ curl http://localhost:5000/.git/config
 
 ---
 
-### Stage 2: Honeypot Detection (15-20 min)
+### Stage 2: Honeypot Detection 
 
 #### Step 4: Investigate Admin Panel
 
@@ -215,7 +215,7 @@ XOR Key: 0x73 (decimal: 115)
 
 ---
 
-### Stage 5: WebSocket Exploitation (45-60 min)
+### Stage 5: WebSocket Exploitation 
 
 #### Step 9: Create WebSocket Client
 
@@ -404,16 +404,9 @@ docker-compose up -d
 
 ---
 
-
-## 🏆 Credits
-
-**Challenge Inspired By:** Real-world C2 infrastructure and bot exploitation techniques
-
----
-
 ## 📄 License
 
-DeltaKiller - Free for educational and CTF use.
+BlackMy7h
 
 ---
 
