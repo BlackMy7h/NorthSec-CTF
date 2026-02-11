@@ -1,6 +1,10 @@
-=====================================
-      "The Enigmatic Vault"
-=====================================
+
+
+
+The Enigmatic Vault
+
+
+
 
 DIFFICULTY: Medium
 
