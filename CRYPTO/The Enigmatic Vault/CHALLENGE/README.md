@@ -30,3 +30,5 @@ HINTS:
 4. XOR is your friend, but which key?
 
 Good luck, hacker!
+
+Author : Wiame5
