@@ -251,9 +251,9 @@ steghide extract -sf Cartman.jpg -p <pass>
 
 The passphrase is the **same key**, but now encoded using **cp1251**.
 
-### DES parity → 16 possible ASCII keys
+### DES parity → 256 possible  keys
 
-DES ignores parity bits → **16 possible ASCII keys** for the same effective DES key.
+DES ignores parity bits → **256 possible  keys** for the same effective DES key.
 
 Script:
 
@@ -272,7 +272,7 @@ for mask in product([0,1], repeat=8):
         pass
 ```
 
-We get **16 candidate passwords**:
+We get **16 candidate passwords** cuz of filter:
 
 ```
 NSC{шифр
