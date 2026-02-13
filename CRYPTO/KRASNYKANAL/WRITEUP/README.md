@@ -198,7 +198,7 @@ hashcat -m 14000 hash -a 3 'NSC{?a?a?a?a'
 ```
 
 This is fast, but encoding is unknown.
-Since the challenge hints Russia → **Cyrillic** → brute-force **raw bytes**.
+Since the challenge hints **Russia** → **no-utf-8** → **Cyrillic** → brute-force **raw bytes**.
 
 So:
 
