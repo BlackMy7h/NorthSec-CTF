@@ -108,7 +108,7 @@ ciphertext
 checksum
 ```
 
-The **IV is located immediately after "sha1\0"**.
+The **IV if exists is located immediately after checksum_algo\0**.
 
 So we just parse the file and extract:
 
