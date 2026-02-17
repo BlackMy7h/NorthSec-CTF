@@ -68,7 +68,7 @@ catch {
 * **ROT13 Logic:** It implemented a manual ROT13 cipher (shifting letters by 13 places) to decode the repository location.
 * **Execution:** The script was designed to `git clone` a remote repository into the user's `$env:temp` folder and execute a Python script named `sss.py`.
 
-![alt text](image.png)
+![alt text](../Screenshots/image.png)
 ### 3. Analyzing the Payload (`ransomware.py`)
 
 After identifying the source repository, this script was the actual ransomware engine.
@@ -83,7 +83,7 @@ ENCRYPTION_KEY = "SuperSecretKey123!"
 
 ### 4. Retrieving the Flag
 
-![alt text](image-1.png)
+![alt text](../Screenshots/image-1.png)
 
 **Final Flag:**
 `NSC{r3p0_k3yS_unl0ck_th3_r4n50m}`
