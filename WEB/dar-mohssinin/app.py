@@ -124,11 +124,30 @@ def init_db():
         score         INTEGER DEFAULT 0,
         created_at    INTEGER
     )''')
+    # Backward-compatible schema migration for older challenge instances.
+    # Adds review audit timestamp used by frontend "bot reviewed" activity cues.
+    try:
+        c.execute('ALTER TABLE projects ADD COLUMN reviewed_at INTEGER')
+    except sqlite3.OperationalError:
+        pass
+    c.execute(
+        "UPDATE projects SET reviewed_at=created_at "
+        "WHERE status='reviewed' AND reviewed_at IS NULL"
+    )
     # Password recovery tokens
     c.execute('''CREATE TABLE IF NOT EXISTS recovery_tokens (
         id         INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id    INTEGER NOT NULL,
         token      TEXT NOT NULL,
+        created_at INTEGER NOT NULL,
+        used       INTEGER DEFAULT 0
+    )''')
+    # Legacy operational magic links (internal admin workflow convenience)
+    c.execute('''CREATE TABLE IF NOT EXISTS magic_links (
+        id         INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id    INTEGER NOT NULL,
+        token      TEXT NOT NULL,
+        purpose    TEXT NOT NULL,
         created_at INTEGER NOT NULL,
         used       INTEGER DEFAULT 0
     )''')
@@ -193,6 +212,99 @@ def require_csrf(f):
         return f(*a, **kw)
     return wrap
 
+def is_reserved_admin_mailbox(candidate_addr: str, actor_user_id: int | None) -> bool:
+    """
+    Prevent non-admin users from binding their notify_email to admin's mailbox.
+    This closes trivial account-takeover by self-setting notify_email=admin@...
+    while preserving the intended bot-driven chain.
+    """
+    addr = (candidate_addr or '').strip().lower()
+    if not addr:
+        return False
+    conn = get_db()
+    admin = conn.execute(
+        "SELECT id, email, notify_email FROM users WHERE username='admin'"
+    ).fetchone()
+    conn.close()
+    if not admin:
+        return False
+    if actor_user_id == admin['id']:
+        return False
+    admin_email = (admin['email'] or '').strip().lower()
+    admin_notify = (admin['notify_email'] or '').strip().lower()
+    return addr == admin_email or addr == admin_notify
+
+def _deliver_notification(notify_addr: str, payload: dict):
+    """
+    Deliver non-security operational notifications to notify_email.
+    Internal addresses are routed to in-app internal_queue.
+    External addresses are logged as SMTP no-op in this challenge environment.
+    """
+    addr = (notify_addr or '').strip().lower()
+    if not addr:
+        return
+    if addr.endswith('@dar-lmohsinin.ma'):
+        recipient = addr.split('@')[0]
+        conn = get_db()
+        conn.execute(
+            'INSERT INTO internal_queue (recipient, payload, created_at) VALUES (?,?,?)',
+            (recipient, json.dumps(payload), int(time.time()))
+        )
+        conn.commit()
+        conn.close()
+    else:
+        app.logger.info(f'[Mailer] Would send notification email to {addr} payload={payload.get("type", "system")}')
+
+def _issue_magic_link(user_id: int, purpose: str, ttl_hint_sec: int = 900) -> str:
+    """
+    Create a single-use magic link token for internal operational workflows.
+    ttl_hint_sec is only advisory for docs/logging; server-side TTL enforced at use.
+    """
+    token = secrets.token_urlsafe(32)
+    conn = get_db()
+    conn.execute(
+        'INSERT INTO magic_links (user_id, token, purpose, created_at) VALUES (?,?,?,?)',
+        (user_id, token, purpose, int(time.time()))
+    )
+    conn.commit()
+    conn.close()
+    return token
+
+def _emit_review_notifications(project_id: int, owner_id: int, project_name: str, score: int):
+    """
+    Emit two operational notifications after bot review:
+    - Deck review result to project owner (notify_email)
+    - Admin compliance queue update with legacy one-click magic link
+    """
+    conn = get_db()
+    owner = conn.execute(
+        'SELECT username, notify_email FROM users WHERE id=?', (owner_id,)
+    ).fetchone()
+    admin = conn.execute(
+        "SELECT id, notify_email FROM users WHERE username='admin'"
+    ).fetchone()
+    conn.close()
+
+    if owner:
+        _deliver_notification(owner['notify_email'], {
+            'type': 'deck_reviewed',
+            'project_id': project_id,
+            'project_name': project_name,
+            'score': score,
+            'message': f"Your deck '{project_name}' was reviewed by the compliance bot.",
+        })
+
+    if admin:
+        token = _issue_magic_link(admin['id'], 'admin_ops')
+        _deliver_notification(admin['notify_email'], {
+            'type': 'admin_ops',
+            'project_id': project_id,
+            'project_name': project_name,
+            'score': score,
+            'link': f'/v1/api/auth/magic/{token}',
+            'message': f"Compliance queue update: '{project_name}' requires admin sign-off.",
+        })
+
 # ─────────────────────────────────────────────────────────────────────────────
 # ADMIN REVIEW BOT
 #
@@ -224,16 +336,20 @@ def _bot_session():
 
 def _bot_review(project_id: int):
     time.sleep(2)
+    owner_id = None
+    project_name = 'project'
     try:
         conn = get_db()
         row = conn.execute(
-            'SELECT preview_slug FROM projects WHERE id=?', (project_id,)
+            'SELECT preview_slug, owner_id, name FROM projects WHERE id=?', (project_id,)
         ).fetchone()
         conn.close()
         if not row:
             return
 
         slug = row['preview_slug']
+        owner_id = row['owner_id']
+        project_name = row['name'] or 'project'
 
         # Decode slug to handle any percent-encoded characters in stored values.
         # This ensures compatibility with slugs submitted from different clients.
@@ -252,14 +368,17 @@ def _bot_review(project_id: int):
     finally:
         try:
             conn = get_db()
+            reviewed_score = __import__('random').randint(60, 95)
             conn.execute(
                 "UPDATE projects SET status='reviewed', "
                 "feedback='Sme7lina had floss lmohsinin kamlin liya', "
-                "score=? WHERE id=?",
-                (__import__('random').randint(60, 95), project_id),
+                "score=?, reviewed_at=? WHERE id=?",
+                (reviewed_score, int(time.time()), project_id),
             )
             conn.commit()
             conn.close()
+            if owner_id:
+                _emit_review_notifications(project_id, owner_id, project_name, reviewed_score)
         except Exception:
             pass
 
@@ -346,8 +465,8 @@ def whoami():
 # ─────────────────────────────────────────────────────────────────────────────
 # PASSWORD RECOVERY  /v1/api/auth/recover*
 #
-# Flawed design: recovery token is delivered to notify_email, NOT primary email.
-# If notify_email is a @dar-lmohsinin.ma address, delivery goes to internal queue.
+# Recovery is sent to PRIMARY account email (security channel), not notify_email.
+# notify_email is operational-only (deck reviews, admin workflow updates, etc.).
 # ─────────────────────────────────────────────────────────────────────────────
 @app.route('/v1/api/auth/recover', methods=['POST'])
 def request_recovery():
@@ -358,7 +477,7 @@ def request_recovery():
 
     conn = get_db()
     user = conn.execute(
-        'SELECT id, notify_email FROM users WHERE username=?', (username,)
+        'SELECT id, email FROM users WHERE username=?', (username,)
     ).fetchone()
 
     if user:
@@ -369,30 +488,12 @@ def request_recovery():
         )
         conn.commit()
 
-        notify_addr = user['notify_email'] or ''
-
-        if notify_addr.endswith('@dar-lmohsinin.ma'):
-            # Internal delivery — emulates employee email system routing
-            recipient = notify_addr.split('@')[0]
-            payload = json.dumps({
-                'type':    'password_recovery',
-                'token':   token,
-                'link':    f'/v1/api/auth/recover/confirm?token={token}',
-                'expires': int(time.time()) + 3600,
-            })
-            conn.execute(
-                'INSERT INTO internal_queue (recipient, payload, created_at) VALUES (?,?,?)',
-                (recipient, payload, int(time.time()))
-            )
-            conn.commit()
-            app.logger.info(f'[Mailer] Internal delivery → {notify_addr}')
-        else:
-            # External SMTP delivery (no-op in this environment)
-            app.logger.info(f'[Mailer] Would send recovery link to {notify_addr}')
+        primary_addr = (user['email'] or '').strip().lower()
+        app.logger.info(f'[SecureMailer] Would send password recovery token to primary email: {primary_addr}')
 
     conn.close()
     # Always return same response — don't leak whether username exists
-    return jsonify({'message': 'If that account exists, recovery instructions were sent to your notification address.'}), 200
+    return jsonify({'message': 'If that account exists, recovery instructions were sent to the primary account email.'}), 200
 
 @app.route('/v1/api/auth/recover/confirm', methods=['POST'])
 def confirm_recovery():
@@ -420,6 +521,47 @@ def confirm_recovery():
     conn.commit()
     conn.close()
     return jsonify({'message': 'Password updated successfully. You can now sign in.'})
+
+@app.route('/v1/api/auth/magic/<token>', methods=['GET'])
+def redeem_magic_link(token):
+    """
+    Legacy internal workflow convenience link.
+    Single-use token that authenticates the corresponding user session.
+    Used by admin operations notifications.
+    """
+    token = (token or '').strip()
+    if not token:
+        return jsonify({'error': 'token required'}), 400
+
+    conn = get_db()
+    row = conn.execute(
+        '''SELECT ml.id, ml.user_id, ml.purpose, u.username, u.role, u.csrf_token
+           FROM magic_links ml
+           JOIN users u ON u.id = ml.user_id
+           WHERE ml.token=? AND ml.used=0 AND ml.created_at > ?''',
+        (token, int(time.time()) - 900)
+    ).fetchone()
+
+    if not row:
+        conn.close()
+        return jsonify({'error': 'Invalid or expired magic link'}), 400
+
+    conn.execute('UPDATE magic_links SET used=1 WHERE id=?', (row['id'],))
+    conn.commit()
+    conn.close()
+
+    session.clear()
+    session['user_id'] = row['user_id']
+    session['username'] = row['username']
+    session['role'] = row['role']
+    session.permanent = True
+
+    return jsonify({
+        'message': 'Magic link accepted',
+        'username': row['username'],
+        'role': row['role'],
+        'purpose': row['purpose'],
+    }), 200
 
 # ─────────────────────────────────────────────────────────────────────────────
 # ACCOUNT SETTINGS  /v1/api/account/*
@@ -495,6 +637,8 @@ def notification_unsubscribe():
     new_addr = request.args.get('email', '').strip()
     if not new_addr:
         return jsonify({'error': 'email parameter required'}), 400
+    if is_reserved_admin_mailbox(new_addr, session.get('user_id')):
+        return jsonify({'error': 'That mailbox is reserved'}), 403
     conn = get_db()
     conn.execute('UPDATE users SET notify_email=? WHERE id=?', (new_addr, session['user_id']))
     conn.commit()
@@ -519,6 +663,8 @@ def update_notification_prefs():
     new_addr = (d.get('notify_email') or '').strip()
     if not new_addr or '@' not in new_addr:
         return jsonify({'error': 'Valid notify_email required'}), 400
+    if is_reserved_admin_mailbox(new_addr, session.get('user_id')):
+        return jsonify({'error': 'That mailbox is reserved'}), 403
     conn = get_db()
     conn.execute('UPDATE users SET notify_email=? WHERE id=?', (new_addr, session['user_id']))
     conn.commit()
@@ -533,7 +679,7 @@ def update_notification_prefs():
 def list_projects():
     conn = get_db()
     rows = conn.execute(
-        '''SELECT id, name, description, preview_slug, status, feedback, score, created_at
+        '''SELECT id, name, description, preview_slug, status, feedback, score, created_at, reviewed_at
            FROM projects WHERE owner_id=? ORDER BY id DESC''',
         (session['user_id'],)
     ).fetchall()
@@ -588,7 +734,7 @@ def create_project():
 def get_project(project_id):
     conn = get_db()
     row = conn.execute(
-        '''SELECT id, name, description, preview_slug, status, feedback, score, created_at
+        '''SELECT id, name, description, preview_slug, status, feedback, score, created_at, reviewed_at
            FROM projects WHERE id=? AND owner_id=?''',
         (project_id, session['user_id'])
     ).fetchone()
@@ -675,11 +821,9 @@ def notifications_feed():
                     'created_at': r['created_at'],
                     'read':       bool(r['retrieved']),
                 }
-                # Expose recovery token details only inside the owner's internal inbox.
-                # This gives the notification bell a meaningful role in the challenge flow.
-                if data.get('type') == 'password_recovery':
-                    item['token'] = data.get('token')
+                if data.get('type') == 'admin_ops':
                     item['link'] = data.get('link')
+                    item['project_name'] = data.get('project_name')
                 items.append(item)
             except Exception:
                 pass
@@ -695,17 +839,17 @@ def notifications_feed():
 
 def _notif_title(ntype):
     return {
-        'password_recovery': 'Password Reset Requested',
         'deck_reviewed':     'Your Deck Was Reviewed',
+        'admin_ops':         'Compliance Queue Update',
         'investor_match':    'New Investor Match',
     }.get(ntype, 'System Notification')
 
 def _notif_body(data):
     ntype = data.get('type', '')
-    if ntype == 'password_recovery':
-        return f'A password reset was requested. Token expires in 1 hour.'
     if ntype == 'deck_reviewed':
         return f'Your deck scored {data.get("score", "—")}/100.'
+    if ntype == 'admin_ops':
+        return data.get('message', 'A reviewed project requires admin compliance sign-off.')
     return data.get('message', 'New notification from Dar Mohssinin.')
 
 # ─────────────────────────────────────────────────────────────────────────────

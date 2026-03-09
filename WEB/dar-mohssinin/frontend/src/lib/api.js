@@ -64,6 +64,7 @@ export const notificationsApi = {
    * Fetch notification feed for the current user.
    * Items appear here only when notify_email is a @dar-lmohsinin.ma address —
    * external addresses receive notifications via SMTP only.
+   * Intended payloads are operational (deck review + admin workflow updates).
    */
   feed: () => _get(`${_xns}/notifications/feed`),
 }

@@ -70,8 +70,15 @@ export default function SettingsPage() {
           <Bell className="w-4 h-4 text-indigo-400" /> Notification Address
         </h2>
         <p className="text-slate-500 text-sm mb-1">
-          All system alerts, deck review results, and account security emails go here.
+          All system alerts, deck review results, and internal workflow emails go here.
           Can differ from your login email — useful for team inboxes or Slack integrations.
+        </p>
+        <p className="text-slate-600 text-xs mb-1">
+          Security-sensitive recovery flows are sent to your primary account email, not this operational mailbox.
+        </p>
+        <p className="text-slate-600 text-xs mb-2">
+          Legacy one-click notification links in older emails still use direct GET callbacks.
+          If opened while authenticated, they update your notification routing instantly.
         </p>
         <form onSubmit={saveNotifications} className="space-y-4">
           <div>

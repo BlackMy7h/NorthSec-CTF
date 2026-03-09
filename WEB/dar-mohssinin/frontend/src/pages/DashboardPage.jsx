@@ -107,6 +107,11 @@ export default function DashboardPage() {
                   <p className="text-slate-500 text-xs mt-0.5">
                     {p.status === 'reviewed' ? `Score: ${p.score}` : 'Under review…'}
                   </p>
+                  <p className="text-slate-600 text-[11px] mt-1">
+                    {p.status === 'reviewed'
+                      ? 'Reviewed by Automated Compliance Bot'
+                      : 'Awaiting Automated Compliance Bot fetch'}
+                  </p>
                 </div>
                 <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-slate-400 transition-colors" />
               </Link>

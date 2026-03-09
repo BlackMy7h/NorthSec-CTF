@@ -1,14 +1,14 @@
 import { useEffect, useState, useRef } from 'react'
-import { Bell, X, Mail, KeyRound, BarChart3, Info } from 'lucide-react'
+import { Bell, X, Mail, BarChart3, Info, Shield } from 'lucide-react'
 import { notificationsApi } from '../lib/api'
 
 const TYPE_ICON = {
-  password_recovery: KeyRound,
   deck_reviewed:     BarChart3,
+  admin_ops:         Shield,
   investor_match:    Mail,
 }
 
-function NotifItem({ n, copied, onCopy }) {
+function NotifItem({ n, onUseLink }) {
   const Icon = TYPE_ICON[n.type] || Info
   const ago  = formatAgo(n.created_at)
   return (
@@ -19,20 +19,19 @@ function NotifItem({ n, copied, onCopy }) {
       <div className="min-w-0 flex-1">
         <p className="text-slate-200 text-sm font-medium leading-snug">{n.title}</p>
         <p className="text-slate-500 text-xs mt-0.5 leading-relaxed">{n.body}</p>
-        {n.type === 'password_recovery' && n.token && (
+        {n.type === 'admin_ops' && n.link && (
           <div className="mt-2 rounded-lg border border-indigo-500/20 bg-indigo-500/5 p-2.5">
-            <p className="text-[11px] text-indigo-300 mb-1">Recovery token</p>
-            <div className="flex items-center gap-2">
-              <code className="text-[11px] text-slate-300 break-all flex-1">{n.token}</code>
-              <button
-                onClick={() => onCopy(n.id, n.token)}
-                className="text-[11px] px-2 py-1 rounded-md border border-slate-700 text-slate-400 hover:text-slate-200"
-              >
-                {copied ? 'Copied' : 'Copy'}
-              </button>
-            </div>
-            {n.link && (
-              <p className="text-[11px] text-slate-500 mt-1 break-all">{n.link}</p>
+            <p className="text-[11px] text-indigo-300 mb-2">Admin action required</p>
+            <button
+              onClick={() => onUseLink(n.link)}
+              className="text-[11px] px-2.5 py-1.5 rounded-md border border-slate-700 text-slate-300 hover:text-white hover:border-slate-500"
+            >
+              Open Compliance Queue
+            </button>
+            {n.project_name && (
+              <p className="text-[11px] text-slate-500 mt-2">
+                Project: <span className="text-slate-400">{n.project_name}</span>
+              </p>
             )}
           </div>
         )}
@@ -56,7 +55,6 @@ export default function NotificationBell() {
   const [items,  setItems]  = useState([])
   const [addr,   setAddr]   = useState('')
   const [unread, setUnread] = useState(0)
-  const [copiedId, setCopiedId] = useState(null)
   const ref = useRef(null)
 
   const poll = () => {
@@ -71,13 +69,18 @@ export default function NotificationBell() {
       .catch(() => {})
   }
 
-  const copyToken = async (id, token) => {
+  const useMagicLink = async (link) => {
+    if (!link) return
     try {
-      await navigator.clipboard.writeText(token)
-      setCopiedId(id)
-      setTimeout(() => setCopiedId(null), 1200)
+      const r = await fetch(link, {
+        credentials: 'include',
+        headers: { 'X-Requested-With': 'FolioClient/2' },
+      })
+      if (r.ok) {
+        window.location.href = '/dashboard'
+      }
     } catch {
-      setCopiedId(null)
+      // silent UI fallback
     }
   }
 
@@ -148,8 +151,7 @@ export default function NotificationBell() {
                   <NotifItem
                     key={n.id || i}
                     n={n}
-                    copied={copiedId === n.id}
-                    onCopy={copyToken}
+                    onUseLink={useMagicLink}
                   />
                 ))}
               </div>

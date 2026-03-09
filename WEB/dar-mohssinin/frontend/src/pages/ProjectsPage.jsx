@@ -3,6 +3,15 @@ import { Link } from 'react-router-dom'
 import { Plus, Loader2, ArrowRight, Clock, CheckCircle2, BarChart3, X } from 'lucide-react'
 import { projectsApi } from '../lib/api'
 
+function fmtReviewTime(ts) {
+  if (!ts) return 'recently'
+  try {
+    return new Date(ts * 1000).toLocaleString()
+  } catch {
+    return 'recently'
+  }
+}
+
 function CreateModal({ onClose, onCreated }) {
   const [name,  setName]  = useState('')
   const [desc,  setDesc]  = useState('')
@@ -187,6 +196,11 @@ export default function ProjectsPage() {
                     </span>
                   )}
                 </div>
+                <p className="text-xs text-slate-600 mt-1">
+                  {p.status === 'reviewed'
+                    ? `Reviewed by Automated Compliance Bot • ${fmtReviewTime(p.reviewed_at)}`
+                    : 'Queued for Automated Compliance Bot review'}
+                </p>
               </div>
               <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-slate-400
                                      transition-colors shrink-0 ml-4" />

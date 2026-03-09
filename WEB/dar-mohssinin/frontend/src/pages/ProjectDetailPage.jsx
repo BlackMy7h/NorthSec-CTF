@@ -11,6 +11,15 @@ const STATUS_CONFIG = {
   reviewed: { color: 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20', label: 'Reviewed' },
 }
 
+function fmtReviewTime(ts) {
+  if (!ts) return 'recently'
+  try {
+    return new Date(ts * 1000).toLocaleString()
+  } catch {
+    return 'recently'
+  }
+}
+
 export default function ProjectDetailPage() {
   const { id }                     = useParams()
   const [project, setProject]      = useState(null)
@@ -92,6 +101,11 @@ export default function ProjectDetailPage() {
                 {cfg.label}
               </span>
             </div>
+            <p className="text-xs text-slate-600 mb-4">
+              {project.status === 'reviewed'
+                ? `Reviewed by Automated Compliance Bot • ${fmtReviewTime(project.reviewed_at)}`
+                : 'Queued for Automated Compliance Bot review'}
+            </p>
 
             {/* Preview slug */}
             <div className="flex items-center gap-2 bg-slate-800/60 rounded-lg px-3 py-2 mb-5">

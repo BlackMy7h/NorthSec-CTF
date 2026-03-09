@@ -52,7 +52,7 @@ export default function LoginPage() {
     const d = await r.json()
     setRecoveryBusy(false)
     setRecoveryMsg(r.ok
-      ? { type: 'success', text: d.message || 'Recovery requested. Check your notification address.' }
+      ? { type: 'success', text: d.message || 'Recovery requested. Check your primary account email.' }
       : { type: 'error', text: d.error || 'Recovery request failed.' })
   }
 
