@@ -18,7 +18,7 @@ def encode_hidden(carrier: str, secret: str) -> str:
 
 
 
-carrier = "Gear 5"
+carrier = "GEAR 5"
 secret  = "Nika_15_Th3_K1NG_Of_A11_The_Pirates"
 
 encoded = encode_hidden(carrier, secret)
