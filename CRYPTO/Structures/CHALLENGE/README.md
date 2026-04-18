@@ -1,6 +1,6 @@
 chall_name: STRUCTURES
 
-level: medium
+level: easy
 
 description: Alien has a message for us
 
