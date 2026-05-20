@@ -1,0 +1,23 @@
+services:
+  fsop:
+    build: .
+    ports:
+      - "1337:1337"
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 256M
+    cap_drop:
+      - ALL
+    cap_add:
+      - SYS_ADMIN    # nsjail: mount/pid/uts namespaces
+      - SYS_PTRACE   # nsjail: pid namespace
+    ulimits:
+      nproc: 128
+      nofile:
+        soft: 256
+        hard: 512
