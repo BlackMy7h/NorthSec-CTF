@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: fb2010_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass123
+      MYSQL_DATABASE: facebook_vintage
+      MYSQL_USER: fb_admin
+      MYSQL_PASSWORD: SecretFBPassword2010
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-ufb_admin", "-pSecretFBPassword2010"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+  web:
+    build: .
+    container_name: fb2010_web
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=mysql+pymysql://fb_admin:SecretFBPassword2010@db:3306/facebook_vintage
+      - SECRET_KEY=s3ss10n_k3y_n0t_th3_fl4g_s3cr3t_xX
+      - JWT_SECRET=fb_retro_secret_9831203912
+      - FLAG=NSC{JWT_r3tr0_s3cr3t_l3ak3d_4dm1n_pwn3d_2010}
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  mysqldata:

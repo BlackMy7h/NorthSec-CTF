@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Facebook</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/facebook2010.css') }}">
+</head>
+<body class="home_php">
+
+    <div id="pageHead" class="clearfix">
+        <div class="header-inner">
+            <div class="logo-search-container">
+                <a href="/home.php" class="fb_logo_logged">facebook</a>
+                <div id="navSearch">
+                    <input type="text" class="inputsearch" placeholder="Search">
+                    <button type="submit" class="search_btn"></button>
+                </div>
+            </div>
+
+            <div id="pageNav">
+                <ul>
+                    <li><a href="/profile.php?id={{ current_user_id }}" class="navLink fwb">{{ current_user_name or 'Profile' }}</a></li>
+                    <li><a href="/home.php" class="navLink">Home</a></li>
+                    <li><a href="#" class="navLink">Find Friends</a></li>
+                </ul>
+
+                <div id="jewelContainer">
+                    <a href="#" class="jewelButton requests" title="Friend Requests"><span class="jewelCount"><span>2</span></span></a>
+                    <a href="#" class="jewelButton messages" title="Messages"></a>
+                    <a href="#" class="jewelButton notifications" title="Notifications"></a>
+                </div>
+
+                <a href="{{ url_for('logout') }}" class="logout-link">Log Out</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="globalContainer" class="clearfix">
+
+        <div id="leftCol">
+            <div class="profile-side-block">
+                <div class="avatar-placeholder"></div>
+                <span class="fwb profile-name-left">{{ current_user_full_name }}</span>
+            </div>
+            <ul class="left-nav-list">
+                <li class="selected"><a href="#" class="item">News Feed</a></li>
+                <li><a href="#" class="item">Messages <span class="count">(1)</span></a></li>
+                <li><a href="#" class="item">Events</a></li>
+                <li><a href="#" class="item">Photos</a></li>
+            </ul>
+
+            <div class="left-nav-header">Apps</div>
+            <ul class="left-nav-list">
+                <li><a href="#" class="item">FarmVille</a></li>
+                <li><a href="#" class="item">Mafia Wars</a></li>
+            </ul>
+        </div>
+
+        <div id="contentCol">
+
+            <div id="statusPublisher">
+                <div class="publisher-tabs">
+                    <a href="#" class="active">Status</a>
+                    <a href="#">Photo</a>
+                    <a href="#">Link</a>
+                    <a href="#">Video</a>
+                </div>
+                <form method="POST" action="/post.php" class="publisherForm">
+                    <div class="publisher-input-area">
+                        <textarea name="content" placeholder="What's on your mind, {{ current_user_name }}?"></textarea>
+                    </div>
+                    <div class="publisher-footer clearfix">
+                        <button class="fb_btn_share rfloat" type="submit">Share</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="newsFeedStream">
+                {% for post in feed_posts %}
+                <div class="feed-story clearfix">
+                    <div class="story-avatar">
+                        <img src="{{ post.author.profile_pic_url or 'https://i.pravatar.cc/50?img=6' }}" alt="" />
+                    </div>
+                    <div class="story-content">
+                        <div class="story-text">
+                            <a href="/profile.php?id={{ post.author.id }}" class="fwb story-author">{{ post.author.full_name }}</a>
+                            {% if post.target_user_id and post.target_user_id != post.author_id %}
+                                → <a href="/profile.php?id={{ post.target_user.id }}" class="fwb story-author">{{ post.target_user.full_name }}</a>
+                            {% endif %}
+                            <div class="feedContent">{{ post.content }}</div>
+                        </div>
+                        <div class="story-footer">
+                            <span class="story-time">{{ post.timestamp.strftime('%b %d at %I:%M %p') }}</span> ·
+                            <a href="#" class="story-action">Like</a> ·
+                            <a href="#" class="story-action">Comment</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+        <div id="rightCol">
+
+            <div class="sidebar-section">
+                <div class="sidebar-header clearfix">
+                    <span class="fwb label">Friend Requests</span>
+                    <a href="#" class="rfloat action-link">See All</a>
+                </div>
+                <div class="sidebar-item clearfix">
+                    <div class="small-avatar"></div>
+                    <div class="sidebar-item-desc">
+                        <a href="#" class="fwb">Someone</a>
+                        <div class="mutual-count">2 mutual friends</div>
+                        <div class="btn-row">
+                            <button class="fb_btn_blue_small">Confirm</button>
+                            <button class="fb_btn_gray_small">Ignore</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section sponsorship">
+                <div class="sidebar-header">
+                    <span class="label">Sponsored</span>
+                </div>
+                <div class="ad-item">
+                    <a href="#" class="fwb ad-title">Play Mafia Wars Classic!</a>
+                    <div class="ad-body clearfix">
+                        <div class="ad-image-mock"></div>
+                        <div class="ad-text">Build your empire, assemble your crew, and rule the underground in real-time browser action. Play free now.</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/fb_core.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+  CTF Exploit Chain (intended path)
+
+  1. Register a dummy account → server issues a JWT cookie (fb_token) with is_admin: false
+  2. View page source → spot <script src="/static/js/fb_core.js"> loaded on every page
+  3. Open fb_core.js → find the comment // [debug] legacy config route still active — /api/v1/debug/config
+  4. Hit GET /api/v1/debug/config → response contains {"_ref": "ZmJfcmV0cm9fc2VjcmV0Xzk4MzEyMDM5MTI="} (secondary hint: robots.txt also disallows /api/)
+  5. Decode base64 → fb_retro_secret_9831203912 (the JWT signing secret)
+  6. Forge JWT with {"user_id": 1, "is_admin": true, ...} signed with the discovered secret
+  7. Set the fb_token cookie in browser DevTools to the forged token
+  8. Visit /profile.php?id=1 → server decodes JWT, sees is_admin: true, template renders with show_flag=True
+  9. JS executes → atob("<flag_b64>") reveals NSC{JWT_r3tr0_s3cr3t_l3ak3d_4dm1n_pwn3d_2010}
+
+  Anti-curl protection
+
+  The flag div has style="display:none" and its text is injected by inline JS via atob(). A raw curl with the cookie gets an empty div — no plaintext flag without JS execution.
+
+  Infrastructure changes
+
+  - MySQL 8 replaces Postgres; healthcheck ensures the web container waits before starting
+  - entrypoint.sh runs seed.py on every startup (db.drop_all() + db.create_all() → admin always gets ID=1)
+  - Admin user: admin@facebouk.internal, is_admin=True, seeded first
+  - Flag is configurable via FLAG= env var in docker-compose.yml
