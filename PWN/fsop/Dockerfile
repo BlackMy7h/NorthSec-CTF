@@ -37,7 +37,7 @@ RUN chmod +x chall ld-2.27.so && \
 EXPOSE 1337
 
 CMD socat TCP-LISTEN:1337,reuseaddr,fork \
-    "EXEC:nsjail --mode e \
+    "EXEC:nsjail --mode e --log_file /dev/null \
      --disable_clone_newuser --disable_clone_newnet --disable_clone_newns \
      --user ctf --group ctf \
      --time_limit 120 --max_cpus 1 --rlimit_as 512 \
