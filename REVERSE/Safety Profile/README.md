@@ -4,4 +4,4 @@ A field technician recovered a firmware update verifier from a discontinued Hydr
 
 Your goal is to produce an update bundle accepted by the verifier.
 
-### Author: fairalien
+*Author*: fairalien
