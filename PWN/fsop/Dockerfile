@@ -29,16 +29,12 @@ COPY chall        ./chall
 COPY libc.so.6    ./libc.so.6
 COPY ld-2.27.so   ./ld-2.27.so
 COPY flag.txt     ./flag.txt
+COPY run.sh       /run.sh
 
-RUN chmod +x chall ld-2.27.so && \
+RUN chmod +x chall ld-2.27.so /run.sh && \
     chmod 444 flag.txt && \
     chown root:root flag.txt
 
 EXPOSE 1337
 
-CMD socat TCP-LISTEN:1337,reuseaddr,fork \
-    "EXEC:nsjail --mode e --log_file /dev/null \
-     --disable_clone_newuser --disable_clone_newnet --disable_clone_newns \
-     --user ctf --group ctf \
-     --time_limit 120 --max_cpus 1 --rlimit_as 512 \
-     --cwd /home/ctf -- /home/ctf/ld-2.27.so /home/ctf/chall,pty,rawer,stderr"
+CMD socat TCP-LISTEN:1337,reuseaddr,fork "EXEC:/run.sh,pty,rawer,stderr"
