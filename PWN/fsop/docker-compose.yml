@@ -18,6 +18,7 @@ services:
       - SYS_PTRACE   # nsjail: pid namespace
       - SETUID       # nsjail: drop to ctf user inside jail
       - SETGID       # nsjail: drop to ctf group inside jail
+      - SETPCAP      # nsjail: prctl(PR_SET_SECUREBITS) to lock capabilities after uid drop
     ulimits:
       nproc: 128
       nofile:
