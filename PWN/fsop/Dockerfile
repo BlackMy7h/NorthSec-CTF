@@ -1,5 +1,5 @@
-# Stage 1: build nsjail against the same glibc as the challenge
-FROM ubuntu:18.04 AS nsjail-builder
+# Stage 1: build nsjail (needs GCC 10+ for C++20)
+FROM ubuntu:22.04 AS nsjail-builder
 
 RUN apt-get update && apt-get install -y \
     bison flex g++ gcc git \
@@ -10,10 +10,13 @@ RUN apt-get update && apt-get install -y \
 RUN git clone --depth=1 https://github.com/google/nsjail.git /nsjail \
     && cd /nsjail && make -j$(nproc)
 
-# Stage 2: minimal challenge image
-FROM ubuntu:18.04
+# Stage 2: challenge image
+# Ubuntu 22.04 is fine — the challenge uses its own bundled ld-2.27.so + libc.so.6
+# so the system glibc version does not affect the binary.
+FROM ubuntu:22.04
 
 RUN apt-get update && apt-get install -y socat \
+    libprotobuf23 libnl-route-3-200 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY --from=nsjail-builder /nsjail/nsjail /usr/local/bin/nsjail
@@ -33,7 +36,6 @@ RUN chmod +x chall ld-2.27.so && \
 
 EXPOSE 1337
 
-# socat accepts TCP connections; nsjail wraps each exec in its own PID/mount/net namespace
 CMD socat TCP-LISTEN:1337,reuseaddr,fork \
     "EXEC:nsjail --mode e --chroot / --user ctf --group ctf \
      --time_limit 120 --max_cpus 1 --rlimit_as 512 \
