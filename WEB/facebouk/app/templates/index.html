@@ -2,23 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Welcome to Facebook - Log In, Sign Up or Learn More</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/facebook2010.css') }}">
+    <title>Welcome to Facebouk - Log In, Sign Up or Learn More</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/facebouk2010.css') }}">
 </head>
 <body>
 
-    <!-- Header Navigation Container -->
     <div class="loggedout_menubar_container">
         <div class="loggedout_menubar clearfix">
             <div class="fb_logo">
-                <h1>facebook</h1>
+                <img src="{{ url_for('static', filename='images/facebouk-logo.png') }}" alt="Facebouk">
             </div>
             
             <div class="menu_login_container">
                 <form method="POST" action="{{ url_for('login') }}" id="login_form">
                     <table cellpadding="0" cellspacing="0">
                         <tbody>
-                            <tr>
+                            <tr class="login_labels">
                                 <td class="login_form_label_field">Email</td>
                                 <td class="login_form_label_field">Password</td>
                                 <td></td>
@@ -43,12 +42,12 @@
         </div>
     </div>
 
-    <!-- Main Container Content -->
-    <div class="contentContainer clearfix">
+    <div class="loggedout_content">
+        <div class="contentContainer clearfix">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div style="background-color: #ffebe8; border: 1px solid #dd3c10; padding: 10px; margin-bottom: 15px; font-weight: bold;">
+                    <div class="loggedout_flash">
                         {{ message }}
                     </div>
                 {% endfor %}
@@ -56,10 +55,8 @@
         {% endwith %}
 
         <div class="fbIndexMap">
-            <div class="title">Facebook helps you connect and share with the people in your life.</div>
-            <div class="map_replacement">
-                <span>[2010 Vintage Interactive Network Map Replica Placeholder]</span>
-            </div>
+            <div class="title">Facebouk helps you connect and share with the people in your life.</div>
+            <div class="map_replacement"></div>
         </div>
 
         <div class="fbIndexFeaturedRegistration">
@@ -112,27 +109,57 @@
                                         <select name="birthday_year">
                                             {% for y in range(2010, 1904, -1) %}<option value="{{ y }}">{{ y }}</option>{% endfor %}
                                         </select>
+                                        <div class="birthday_help">
+                                            <a href="#">Why do I need to provide this?</a>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <div style="margin-top: 15px;">
+                        <div class="signup_button_row">
                             <input value="Sign Up" type="submit" class="fb_btn_green">
                         </div>
                     </form>
                 </div>
+                <div class="create_page">
+                    <a href="#" class="fwb">Create a Page</a> for a celebrity, band or business.
+                </div>
             </div>
+        </div>
         </div>
     </div>
 
-    <!-- Page Footer -->
     <div id="pageFooter">
         <div id="footerContainer" class="clearfix">
-            <div id="footerRight">
-                <a href="#">About</a><a href="#">Advertising</a><a href="#">Developers</a><a href="#">Careers</a><a href="#">Terms</a>
+            <div id="localeLinks">
+                <a href="#">English (US)</a>
+                <a href="#">Español</a>
+                <a href="#">Português (Brasil)</a>
+                <a href="#">Français (France)</a>
+                <a href="#">Deutsch</a>
+                <a href="#">Italiano</a>
+                <a href="#">العربية</a>
+                <a href="#">हिन्दी</a>
+                <a href="#">中文(简体)</a>
+                <a href="#" class="more_locales">»</a>
             </div>
-            <div id="footerLeft">
-                <span>Facebook © 2010</span>
+            <div id="footerSeparator"></div>
+            <div id="footerLinksRow" class="clearfix">
+                <div id="footerLeft">
+                    <span>Facebouk © 2010</span>
+                </div>
+                <div id="footerRight">
+                    <a href="#">Mobile</a>
+                    <a href="#">Find Friends</a>
+                    <a href="#">Badges</a>
+                    <a href="#">Careers</a>
+                    <a href="#">About</a>
+                    <a href="#">Advertising</a>
+                    <a href="#">Developers</a>
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Help</a>
+                </div>
             </div>
         </div>
     </div>

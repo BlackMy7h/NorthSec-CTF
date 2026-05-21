@@ -9,6 +9,7 @@ body {
     font-size: 11px;
     background-color: #fff;
     color: #333;
+    min-width: 980px;
 }
 
 a { color: #3b5998; text-decoration: none; }
@@ -429,29 +430,27 @@ body.home_php, body.profile_php {
 
 .loggedout_menubar_container {
     background: #3b5998;
-    border-bottom: 1px solid #29447e;
+    border-bottom: 0;
     height: 82px;
 }
 
 .loggedout_menubar {
-    width: 980px;
+    width: 912px;
     margin: 0 auto;
-    padding-top: 12px;
+    padding-top: 9px;
 }
 
-.fb_logo h1 {
-    margin: 0;
-    padding: 0;
+.fb_logo img {
+    display: block;
     float: left;
-    font-size: 44px;
-    letter-spacing: -2px;
-    color: #fff;
-    line-height: 52px;
+    width: 183px;
+    height: auto;
+    margin: 20px 0 0 -8px;
 }
 
 .menu_login_container {
     float: right;
-    margin-top: 8px;
+    margin-top: 3px;
     color: #fff;
 }
 
@@ -460,18 +459,33 @@ body.home_php, body.profile_php {
     color: #fff;
 }
 
+.login_labels td {
+    font-weight: bold;
+}
+
 .login_form_label_field {
     font-size: 11px;
-    padding: 0 10px 4px 0;
+    padding: 0 12px 4px 0;
     color: #d8dfea;
 }
 
 .menu_login_container .inputtext,
 .menu_login_container .inputpassword {
-    width: 150px;
+    width: 142px;
+    height: 15px;
     border: 1px solid #1d2a5b;
     padding: 3px;
     font-size: 11px;
+}
+
+.menu_login_container input[type="checkbox"] {
+    vertical-align: middle;
+    margin: 2px 4px 0 4px;
+}
+
+.menu_login_container label {
+    color: #9daccb;
+    font-weight: normal;
 }
 
 .menu_login_container a { color: #d8dfea; }
@@ -479,102 +493,150 @@ body.home_php, body.profile_php {
 .fb_btn_blue {
     background: #5b74a8;
     border: 1px solid #29447e;
+    border-color: #29447e #29447e #1a356e;
     color: #fff;
     font-weight: bold;
     font-size: 11px;
-    padding: 3px 8px;
+    height: 22px;
+    padding: 2px 8px 3px;
     cursor: pointer;
 }
 
 .fb_btn_green {
-    background: #6d84b4;
     background: #69a74e;
     border: 1px solid #3b6e22;
+    border-bottom-color: #2c5115;
     color: #fff;
     font-weight: bold;
-    font-size: 13px;
-    padding: 6px 18px;
+    font-size: 11px;
+    padding: 3px 10px;
     cursor: pointer;
 }
 
+.loggedout_content {
+    background: linear-gradient(#fff, #d3daea);
+    border-bottom: 1px solid #c8cfde;
+}
+
 .contentContainer {
-    width: 980px;
+    width: 928px;
     margin: 0 auto;
-    padding: 20px 0 40px 0;
+    min-height: 344px;
+    padding: 21px 0 20px;
+}
+
+.loggedout_flash {
+    background-color: #ffebe8;
+    border: 1px solid #dd3c10;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 15px;
+    padding: 9px 10px;
 }
 
 .fbIndexMap {
     float: left;
-    width: 565px;
-    padding-right: 15px;
+    width: 537px;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .fbIndexMap .title {
     font-size: 20px;
     font-weight: bold;
     color: #0e385f;
-    margin: 20px 0 10px 0;
+    margin: 17px 0 20px;
     line-height: 29px;
 }
 
 .map_replacement {
-    height: 270px;
-    background: #eceff5 url('../images/map-facebook.png') no-repeat center center;
-    border: 1px solid #d8dfea;
+    width: 537px;
+    height: 184px;
+    background: url('../images/map-facebouk.png') no-repeat 50% 50%;
+    background-size: 537px auto;
 }
 
 .fbIndexFeaturedRegistration {
     float: right;
-    width: 390px;
+    width: 388px;
+    padding-right: 0;
 }
 
 .WelcomePage_SignUpHeadline {
-    font-size: 28px;
+    font-size: 20px;
     font-weight: bold;
-    color: #333;
-    margin-top: 12px;
+    color: #0e385f;
+    margin-top: 16px;
+    line-height: 24px;
 }
 
 .WelcomePage_SignUpSubheadline {
-    font-size: 15px;
-    color: #666;
-    margin: 6px 0 14px 0;
+    font-size: 20px;
+    color: #0e385f;
+    margin: 2px 0 15px;
+    line-height: 24px;
 }
 
 #reg_form_box {
-    background: #fff;
-    border: 1px solid #d8dfea;
-    padding: 10px 10px 12px 10px;
+    background: transparent;
+    border: 0;
+    padding: 0;
 }
 
 #reg_form_box table.editor {
-    width: 100%;
+    width: 340px;
+    margin-left: 0;
+    border-collapse: collapse;
 }
 
 #reg_form_box td.label {
-    width: 120px;
-    color: #666;
-    padding: 5px 0;
+    width: 118px;
+    color: #0e385f;
+    padding: 3px 4px 4px 0;
+    text-align: right;
+    vertical-align: middle;
+    white-space: nowrap;
 }
 
 #reg_form_box .inputtext,
 #reg_form_box .inputpassword {
-    width: 240px;
+    width: 205px;
+    height: 15px;
     border: 1px solid #bdc7d8;
-    padding: 4px;
+    padding: 3px;
     font-size: 11px;
 }
 
 #reg_form_box select {
-    border: 1px solid #bdc7d8;
+    border: 1px solid #96a6c5;
     font-size: 11px;
-    padding: 2px;
+    height: 22px;
+    padding: 1px;
+}
+
+.birthday_help {
+    font-size: 9px;
+    line-height: 12px;
+}
+
+.signup_button_row {
+    margin: 9px 0 0 125px;
+}
+
+.create_page {
+    border-top: 1px solid #a0a9c0;
+    color: #555;
+    font-size: 11px;
+    font-weight: bold;
+    margin-top: 16px;
+    padding-top: 12px;
+    text-align: center;
 }
 
 #pageFooter {
     background: #fff;
-    border-top: 1px solid #ddd;
-    padding: 20px 0;
+    border-top: 0;
+    padding: 17px 0 0;
     color: #666;
 }
 
@@ -583,8 +645,48 @@ body.home_php, body.profile_php {
     margin: 0 auto;
 }
 
-#footerRight { float: right; }
-#footerRight a { margin-left: 10px; color: #3b5998; }
+#localeLinks {
+    padding-left: 8px;
+}
+
+#localeLinks a {
+    margin-right: 10px;
+}
+
+#localeLinks .more_locales {
+    font-size: 18px;
+    line-height: 8px;
+    vertical-align: -2px;
+}
+
+#footerSeparator {
+    border-top: 1px solid #b3b3b3;
+    height: 1px;
+    margin: 14px 0 9px;
+}
+
+#footerLinksRow {
+    padding: 0 8px;
+}
+
+#footerRight {
+    float: right;
+    text-align: right;
+}
+
+#footerRight a {
+    color: #3b5998;
+}
+
+#footerRight a:before {
+    color: #666;
+    content: " · ";
+}
+
+#footerRight a:first-child:before {
+    content: "";
+}
+
 #footerLeft { float: left; }
 
 /* Admin badge — only shown to admin JWT visitors on admin profiles */
