@@ -21,13 +21,35 @@ Suggested player workflow:
 3. Reverse the JavaScript and the WebAssembly module to find the real verification path.
 4. Trigger the hidden success condition and submit the revealed flag.
 
+## Infra Deployment
+
+The bundle is prepared for a dynamic-flag deployment flow.
+
+Example `docker-compose.yml`:
+
+```yaml
+services:
+  buzzk1ll:
+    build: .
+    ports:
+      - "${HOST_PORT}:31337"
+    environment:
+      PORT: "31337"
+      FLAG: "${FLAG}"
+      TEAM_ID: "${TEAM_ID}"
+      INSTANCE_ID: "${INSTANCE_ID}"
+```
+
+At container startup, the service generates `public/game.js` and `public/game.wasm`
+from internal templates using `FLAG`.
+
 ## Local Deployment
 
 Build and run the container:
 
 ```sh
 docker build -t buzzk1ll .
-docker run --rm -p 8080:8080 buzzk1ll
+docker run --rm -p 8080:31337 -e FLAG='NSC{test_flag}' buzzk1ll
 ```
 
 Then open:

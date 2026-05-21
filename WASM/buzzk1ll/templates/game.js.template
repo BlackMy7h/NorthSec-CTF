@@ -4,7 +4,7 @@
   const DATA_OFFSET = 0x1200;
   const STATE_OFFSET = 0x1280;
   const FLAG_OUT_OFFSET = 0x2000;
-  const FLAG_LEN = 5;
+  const FLAG_LEN = __FLAG_LEN__;
   const SENTINEL_ADDR = 0xffff;
   const SEED_VALUE = 0x4e534300;
   const MOSQUITO_COUNT = 40;

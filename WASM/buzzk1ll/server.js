@@ -2,8 +2,8 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 
-const root = __dirname;
-const port = Number(process.env.PORT || 8080);
+const root = path.join(__dirname, "public");
+const port = Number(process.env.PORT || 31337);
 
 const types = {
   ".html": "text/html; charset=utf-8",
