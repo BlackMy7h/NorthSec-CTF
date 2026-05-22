@@ -12,8 +12,7 @@ class ST1919:
     def __init__(self, seed):
         self.index = 7
         self.st = [0 for _ in range(7)]
-        #self.secret=bytes_to_long(b"NSC{th1_1s_n0t_th3_fl4g_g00d_lu4k_my_h0m135}")
-        self.secret=bytes_to_long(b"3CI{Mer3_n3_tw1t3r_1sn057_crypt0gr4ph_s3cur3_7814693}")
+        self.secret=bytes_to_long(b"NSC{th1_1s_n0t_th3_fl4g_g00d_lu4k_my_h0m135}")
         self.gift=self.secret
         self.st[0] = seed
         for i in range(1, 7):
