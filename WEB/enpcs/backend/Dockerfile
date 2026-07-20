@@ -23,4 +23,4 @@ COPY fake-flag.txt ./flag.txt
 COPY --from=frontend-build /frontend/dist ./public
 
 EXPOSE 3000
-CMD ["gunicorn", "--bind", "0.0.0.0:3000", "--workers", "1", "--threads", "8", "backend.app:app"]
+CMD ["gunicorn", "--bind", "127.0.0.1:3000", "--workers", "1", "--threads", "8", "backend.app:app"]

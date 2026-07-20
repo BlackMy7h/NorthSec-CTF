@@ -1,0 +1,723 @@
+/* --- Global Typography & Links (2010 default) --- */
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+    font-size: 11px;
+    background-color: #fff;
+    color: #333;
+    min-width: 980px;
+}
+
+a { color: #3b5998; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.fwb { font-weight: bold; }
+.rfloat { float: right; }
+
+/* --- Authenticated Home/Profile Page Background --- */
+body.home_php, body.profile_php {
+    background-color: #e7ebf2;
+    overflow-y: scroll;
+}
+
+/* --- Top Header (#pageHead) - float-based 980px --- */
+#pageHead {
+    background-color: #3b5998;
+    border-bottom: 1px solid #29447e;
+    height: 37px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.header-inner {
+    width: 980px;
+    margin: 0 auto;
+    height: 37px;
+}
+
+.logo-search-container {
+    float: left;
+    height: 37px;
+}
+
+.fb_logo_logged {
+    float: left;
+    color: #fff;
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: -1.5px;
+    text-decoration: none !important;
+    line-height: 37px;
+    margin-right: 10px;
+}
+
+#navSearch {
+    float: left;
+    margin-top: 6px;
+    position: relative;
+}
+
+#navSearch .inputsearch {
+    width: 280px;
+    height: 15px;
+    padding: 3px 22px 4px 5px;
+    border: 1px solid #1d2a5b;
+    font-size: 11px;
+}
+
+#navSearch .search_btn {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    width: 14px;
+    height: 14px;
+    background: url('https://web.archive.org/web/20110731223651im_/http://static.ak.fbcdn.net/rsrc.php/v1/yV/r/IJYgcESal33.png') no-repeat left top;
+    border: none;
+    cursor: pointer;
+}
+
+#pageNav {
+    float: right;
+    height: 37px;
+}
+
+#pageNav ul {
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+#pageNav ul li {
+    list-style: none;
+    float: left;
+}
+
+#pageNav .navLink {
+    color: #fff;
+    padding: 10px 10px;
+    display: block;
+    font-size: 11px;
+    height: 17px;
+    line-height: 17px;
+}
+
+#pageNav .navLink:hover {
+    background-color: #627aad;
+    text-decoration: none;
+}
+
+.logout-link {
+    float: left;
+    color: #dee5f2;
+    font-size: 11px;
+    margin-left: 12px;
+    font-weight: bold;
+    line-height: 37px;
+}
+
+/* Notification Jewels */
+#jewelContainer {
+    float: left;
+    margin-left: 6px;
+    margin-top: 7px;
+}
+
+.jewelButton {
+    width: 24px;
+    height: 22px;
+    float: left;
+    display: block;
+    background: url('https://web.archive.org/web/20110731223651im_/http://static.ak.fbcdn.net/rsrc.php/v1/yT/r/cWd6w4ZgtPx.png') no-repeat;
+    position: relative;
+    margin: 0 2px;
+}
+
+.jewelButton.requests { background-position: -255px -235px; }
+.jewelButton.messages { background-position: -267px -147px; }
+.jewelButton.notifications { background-position: -280px -235px; }
+
+.jewelCount {
+    position: absolute;
+    top: -4px;
+    right: -3px;
+    background-color: #f03d25;
+    color: #fff;
+    font-size: 9px;
+    font-weight: bold;
+    padding: 1px 3px;
+    border: 1px solid #dd3822;
+}
+
+/* --- Main 980px container --- */
+#globalContainer {
+    width: 980px;
+    margin: 55px auto 0 auto;
+    padding-bottom: 40px;
+}
+
+/* --- Dashboard columns (kept) --- */
+#leftCol { float: left; width: 180px; padding-top: 10px; }
+#contentCol { float: left; width: 520px; margin-left: 20px; background: #fff; border: 1px solid #b3b3b3; min-height: 600px; padding: 15px; }
+#rightCol { float: right; width: 244px; padding-top: 10px; }
+
+.profile-side-block { padding: 5px; margin-bottom: 10px; }
+.avatar-placeholder { width: 32px; height: 32px; background-color: #d8dfea; border: 1px solid #b3b3b3; margin-right: 8px; float: left; }
+.profile-name-left { font-size: 12px; color: #333; line-height: 32px; }
+
+.left-nav-header { font-weight: bold; color: #666; font-size: 11px; padding: 8px 5px 4px 5px; text-transform: uppercase; }
+.left-nav-list { margin: 0; padding: 0; }
+.left-nav-list li { list-style: none; }
+.left-nav-list li a { display: block; padding: 4px 5px; color: #333; font-size: 11px; }
+.left-nav-list li.selected a, .left-nav-list li a:hover { background-color: #d8dfea; text-decoration: none; font-weight: bold; }
+.left-nav-list .count { color: #808080; font-weight: normal; }
+
+#statusPublisher { border-bottom: 1px solid #e5e5e5; padding-bottom: 12px; margin-bottom: 20px; }
+.publisher-tabs { border-bottom: 1px solid #bdc7d8; padding-bottom: 4px; margin-bottom: 8px; }
+.publisher-tabs a { font-weight: bold; margin-right: 15px; font-size: 11px; color: #3b5998; }
+.publisher-tabs a.active { color: #333; }
+.publisher-input-area textarea { width: 508px; height: 44px; border: 1px solid #bdc7d8; padding: 5px; font-family: inherit; font-size: 12px; resize: none; }
+
+.fb_btn_share {
+    background-color: #5b74a8;
+    border: 1px solid #29447e;
+    color: #fff;
+    font-weight: bold;
+    font-size: 11px;
+    padding: 4px 12px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.feed-story { border-bottom: 1px solid #e5e5e5; padding: 12px 0; }
+.story-avatar { float: left; width: 50px; height: 50px; background-color: #eceff5; border: 1px solid #cbd2e1; overflow: hidden; }
+.story-avatar img { width: 50px; height: 50px; display: block; }
+.story-content { margin-left: 62px; }
+.story-author { color: #3b5998; }
+.story-text { font-size: 12px; line-height: 14px; }
+.story-footer { font-size: 11px; color: #808080; margin-top: 4px; }
+.story-action { color: #3b5998; }
+
+.sidebar-section { background: #fff; border: 1px solid #b3b3b3; padding: 10px; margin-bottom: 15px; }
+.sidebar-header { border-bottom: 1px solid #e5e5e5; padding-bottom: 4px; margin-bottom: 8px; }
+.sidebar-header .label { color: #666; font-weight: bold; }
+.sidebar-header .action-link { font-size: 10px; }
+.small-avatar { float: left; width: 32px; height: 32px; background-color: #eceff5; }
+.sidebar-item-desc { margin-left: 40px; }
+.mutual-count { font-size: 10px; color: #666; margin: 2px 0; }
+.btn-row { margin-top: 4px; }
+.fb_btn_blue_small { background-color: #5b74a8; border: 1px solid #29447e; color: #fff; font-size: 10px; font-weight: bold; padding: 2px 6px; cursor: pointer; }
+.fb_btn_gray_small { background-color: #f2f2f2; border: 1px solid #999; color: #333; font-size: 10px; font-weight: bold; padding: 2px 6px; cursor: pointer; }
+.sidebar-section.sponsorship .ad-title { color: #3b5998; font-size: 11px; }
+.ad-image-mock { float: left; width: 75px; height: 75px; background-color: #525252; margin-top: 4px; margin-right: 8px; }
+.ad-text { font-size: 11px; color: #555; line-height: 13px; margin-top: 4px; }
+
+/* --- Profile Page (2010: 200 + 760) --- */
+
+#profileLeftCol {
+    float: left;
+    width: 200px;
+}
+
+#profileRightCol {
+    float: right;
+    width: 760px;
+}
+
+.profilePicBlock {
+    background: #fff;
+    border: 1px solid #b3b3b3;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.profilePicWrap {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+}
+
+.profilePic {
+    width: 200px;
+    height: 200px;
+    display: block;
+}
+
+.underPicLinks {
+    margin-top: 6px;
+    line-height: 16px;
+}
+
+.leftBox {
+    background: #fff;
+    border: 1px solid #b3b3b3;
+    margin-bottom: 10px;
+}
+
+.leftBoxTitle {
+    padding: 6px 8px;
+    background: #eceff5;
+    border-bottom: 1px solid #d8dfea;
+    color: #1c2a47;
+}
+
+.leftBoxBody {
+    padding: 8px;
+}
+
+.infoTable { width: 100%; }
+.infoLabel { width: 72px; color: #666; padding: 2px 0; vertical-align: top; }
+.infoValue { color: #333; padding: 2px 0; }
+
+.friendTile {
+    float: left;
+    width: 60px;
+    margin: 0 5px 8px 0;
+    overflow: hidden;
+}
+.friendTile img {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #d8dfea;
+    display: block;
+}
+.friendName {
+    width: 60px;
+    height: 14px;
+    overflow: hidden;
+}
+
+.profileHeader {
+    background: #fff;
+    border: 1px solid #b3b3b3;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+}
+
+.profileName {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1c2a47;
+    letter-spacing: -0.5px;
+}
+
+.profileQuote {
+    margin-top: 4px;
+    color: #666;
+}
+
+#profileTabs {
+    background: #fff;
+    border: 1px solid #b3b3b3;
+    border-bottom: none;
+}
+
+#profileTabs ul { margin: 0; padding: 0 0 0 8px; }
+#profileTabs li { list-style: none; float: left; margin-right: 6px; }
+#profileTabs a {
+    display: block;
+    padding: 8px 10px;
+    color: #3b5998;
+    font-weight: bold;
+    border: 1px solid #b3b3b3;
+    border-bottom: none;
+    background: #eceff5;
+    margin-top: 6px;
+}
+#profileTabs li.selected a {
+    background: #fff;
+    color: #333;
+    position: relative;
+    top: 1px;
+}
+
+.wallPublisher {
+    background: #fff;
+    border: 1px solid #b3b3b3;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.wallPublisherTitle { margin-bottom: 6px; color: #333; }
+
+.wallTextArea {
+    width: 736px;
+    height: 60px;
+    border: 1px solid #bdc7d8;
+    padding: 5px;
+    font-family: inherit;
+    font-size: 12px;
+    resize: none;
+}
+
+.wallPublisherFooter { margin-top: 6px; }
+
+.wallStream {
+    background: #fff;
+    border: 1px solid #b3b3b3;
+}
+
+.wallStory {
+    border-top: 1px solid #e5e5e5;
+    padding: 10px;
+}
+
+.wallStory:first-child { border-top: none; }
+
+.wallAvatar {
+    float: left;
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    border: 1px solid #cbd2e1;
+    background: #eceff5;
+}
+.wallAvatar img { width: 50px; height: 50px; display: block; }
+
+.wallBody { margin-left: 62px; }
+.wallContent { margin-top: 3px; font-size: 12px; line-height: 15px; }
+.toArrow { color: #808080; padding: 0 4px; }
+
+.wallFooter {
+    margin-top: 5px;
+    color: #808080;
+}
+.wallFooter a { color: #3b5998; }
+.wallLikes { color: #666; }
+
+.commentBox {
+    background: #eceff5;
+    border-top: 1px solid #d8dfea;
+    padding: 6px;
+    margin-top: 8px;
+}
+
+.commentRow { padding: 4px 0; }
+
+.commentAvatar {
+    float: left;
+    width: 32px;
+    height: 32px;
+    overflow: hidden;
+    border: 1px solid #d8dfea;
+    background: #fff;
+}
+.commentAvatar img { width: 32px; height: 32px; display: block; }
+
+.commentBody { margin-left: 42px; }
+.commentText { color: #333; }
+.commentMeta { color: #808080; font-size: 10px; margin-top: 2px; }
+
+/* --- Logged-out page CSS (existing file may include more in other branch) --- */
+
+/* ------------------------------------------------------------
+   Logged-out landing page (index.php) — 2010 fixed-width layout
+   ------------------------------------------------------------ */
+
+.loggedout_menubar_container {
+    background: #3b5998;
+    border-bottom: 0;
+    height: 82px;
+}
+
+.loggedout_menubar {
+    width: 912px;
+    margin: 0 auto;
+    padding-top: 9px;
+}
+
+.fb_logo img {
+    display: block;
+    float: left;
+    width: 183px;
+    height: auto;
+    margin: 20px 0 0 -8px;
+}
+
+.menu_login_container {
+    float: right;
+    margin-top: 3px;
+    color: #fff;
+}
+
+.menu_login_container table {
+    font-size: 11px;
+    color: #fff;
+}
+
+.login_labels td {
+    font-weight: bold;
+}
+
+.login_form_label_field {
+    font-size: 11px;
+    padding: 0 12px 4px 0;
+    color: #d8dfea;
+}
+
+.menu_login_container .inputtext,
+.menu_login_container .inputpassword {
+    width: 142px;
+    height: 15px;
+    border: 1px solid #1d2a5b;
+    padding: 3px;
+    font-size: 11px;
+}
+
+.menu_login_container input[type="checkbox"] {
+    vertical-align: middle;
+    margin: 2px 4px 0 4px;
+}
+
+.menu_login_container label {
+    color: #9daccb;
+    font-weight: normal;
+}
+
+.menu_login_container a { color: #d8dfea; }
+
+.fb_btn_blue {
+    background: #5b74a8;
+    border: 1px solid #29447e;
+    border-color: #29447e #29447e #1a356e;
+    color: #fff;
+    font-weight: bold;
+    font-size: 11px;
+    height: 22px;
+    padding: 2px 8px 3px;
+    cursor: pointer;
+}
+
+.fb_btn_green {
+    background: #69a74e;
+    border: 1px solid #3b6e22;
+    border-bottom-color: #2c5115;
+    color: #fff;
+    font-weight: bold;
+    font-size: 11px;
+    padding: 3px 10px;
+    cursor: pointer;
+}
+
+.loggedout_content {
+    background: linear-gradient(#fff, #d3daea);
+    border-bottom: 1px solid #c8cfde;
+}
+
+.contentContainer {
+    width: 928px;
+    margin: 0 auto;
+    min-height: 344px;
+    padding: 21px 0 20px;
+}
+
+.loggedout_flash {
+    background-color: #ffebe8;
+    border: 1px solid #dd3c10;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 15px;
+    padding: 9px 10px;
+}
+
+.fbIndexMap {
+    float: left;
+    width: 537px;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.fbIndexMap .title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #0e385f;
+    margin: 17px 0 20px;
+    line-height: 29px;
+}
+
+.map_replacement {
+    width: 537px;
+    height: 184px;
+    background: url('../images/map-facebouk.png') no-repeat 50% 50%;
+    background-size: 537px auto;
+}
+
+.fbIndexFeaturedRegistration {
+    float: right;
+    width: 388px;
+    padding-right: 0;
+}
+
+.WelcomePage_SignUpHeadline {
+    font-size: 20px;
+    font-weight: bold;
+    color: #0e385f;
+    margin-top: 16px;
+    line-height: 24px;
+}
+
+.WelcomePage_SignUpSubheadline {
+    font-size: 20px;
+    color: #0e385f;
+    margin: 2px 0 15px;
+    line-height: 24px;
+}
+
+#reg_form_box {
+    background: transparent;
+    border: 0;
+    padding: 0;
+}
+
+#reg_form_box table.editor {
+    width: 340px;
+    margin-left: 0;
+    border-collapse: collapse;
+}
+
+#reg_form_box td.label {
+    width: 118px;
+    color: #0e385f;
+    padding: 3px 4px 4px 0;
+    text-align: right;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+#reg_form_box .inputtext,
+#reg_form_box .inputpassword {
+    width: 205px;
+    height: 15px;
+    border: 1px solid #bdc7d8;
+    padding: 3px;
+    font-size: 11px;
+}
+
+#reg_form_box select {
+    border: 1px solid #96a6c5;
+    font-size: 11px;
+    height: 22px;
+    padding: 1px;
+}
+
+.birthday_help {
+    font-size: 9px;
+    line-height: 12px;
+}
+
+.signup_button_row {
+    margin: 9px 0 0 125px;
+}
+
+.create_page {
+    border-top: 1px solid #a0a9c0;
+    color: #555;
+    font-size: 11px;
+    font-weight: bold;
+    margin-top: 16px;
+    padding-top: 12px;
+    text-align: center;
+}
+
+#pageFooter {
+    background: #fff;
+    border-top: 0;
+    padding: 17px 0 0;
+    color: #666;
+}
+
+#footerContainer {
+    width: 980px;
+    margin: 0 auto;
+}
+
+#localeLinks {
+    padding-left: 8px;
+}
+
+#localeLinks a {
+    margin-right: 10px;
+}
+
+#localeLinks .more_locales {
+    font-size: 18px;
+    line-height: 8px;
+    vertical-align: -2px;
+}
+
+#footerSeparator {
+    border-top: 1px solid #b3b3b3;
+    height: 1px;
+    margin: 14px 0 9px;
+}
+
+#footerLinksRow {
+    padding: 0 8px;
+}
+
+#footerRight {
+    float: right;
+    text-align: right;
+}
+
+#footerRight a {
+    color: #3b5998;
+}
+
+#footerRight a:before {
+    color: #666;
+    content: " · ";
+}
+
+#footerRight a:first-child:before {
+    content: "";
+}
+
+#footerLeft { float: left; }
+
+/* Admin badge — only shown to admin JWT visitors on admin profiles */
+.admin-badge {
+    margin-top: 6px;
+    font-size: 11px;
+    color: #3b5998;
+    font-weight: bold;
+}
+
+.admin-badge-icon {
+    font-size: 13px;
+}
+
+/* --- Photo dump fake post (static, no DB) --- */
+.fb-photo-story .story-avatar img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+.fb-photo-single {
+    margin-top: 8px;
+}
+
+.fb-photo-single img {
+    width: 100%;
+    height: auto;
+    max-height: 360px;
+    object-fit: cover;
+    border: 1px solid #d8dfea;
+    background: #fff;
+    display: block;
+}

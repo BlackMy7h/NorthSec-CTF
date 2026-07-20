@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: fb2010_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: faceboukblmodemwla5dhfcyber
+      MYSQL_DATABASE: facebouk_db
+      MYSQL_USER: mark_zouk
+      MYSQL_PASSWORD: mark_zouk@1@2@3
+    ports:
+      - "3306:3306"
+    # NOTE: For the CTF challenge, keep the DB ephemeral so it always reseeds cleanly.
+    # If you want persistence, re-add the named volume mapping.
+    tmpfs:
+      - /var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-umark_zouk", "-pmark_zouk@1@2@3"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+  web:
+    build: .
+    container_name: fb2010_web
+    restart: always
+    ports:
+      - "127.0.0.1:5000:5000"
+    environment:
+      - DATABASE_URL=mysql+pymysql://mark_zouk:mark_zouk%401%402%403@db:3306/facebouk_db
+      - SECRET_KEY=s3ss10n_k3y_n0t_th3_fl4g_s3cr3t_xX
+      - JWT_SECRET=fb_retro_secret_9831203912
+      - FLAG=NSC{JWT_r3tr0_s3cr3t_l3ak3d_4dm1n_pwn3d_2010}
+    depends_on:
+      db:
+        condition: service_healthy
+
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+          ignore:
+            - venv/
+            - __pycache__/
+            - .git/
+
+        - action: rebuild
+          path: requirements.txt
+
+volumes:
+  mysqldata:

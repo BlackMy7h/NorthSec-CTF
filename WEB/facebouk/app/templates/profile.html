@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}{{ profile_user.full_name }} | Facebouk{% endblock %}
+{% block body_class %}profile_php{% endblock %}
+
+{% block content %}
+<div id="globalContainer" class="clearfix">
+
+    <div id="profileArea" class="clearfix">
+
+        <div id="profileLeftCol">
+            <div class="profilePicBlock">
+                <div class="profilePicWrap">
+                    <img class="profilePic" src="{{ profile_user.profile_pic_url or 'https://i.pravatar.cc/200?img=1' }}" alt="" />
+                </div>
+                <div class="underPicLinks">
+                    <a href="#">View Photos of Me</a><br />
+                    <a href="#">Send a Message</a><br />
+                    <a href="#">Poke</a>
+                </div>
+            </div>
+
+            <div class="leftBox">
+                <div class="leftBoxTitle fwb">Information</div>
+                <div class="leftBoxBody">
+                    <table class="infoTable" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td class="infoLabel">Relationship:</td>
+                            <td class="infoValue">Single</td>
+                        </tr>
+                        <tr>
+                            <td class="infoLabel">Networks:</td>
+                            <td class="infoValue">Classic Web</td>
+                        </tr>
+                        <tr>
+                            <td class="infoLabel">Birthday:</td>
+                            <td class="infoValue">
+                                {% if profile_user.birthday %}{{ profile_user.birthday.strftime('%B %d, %Y') }}{% else %}—{% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="leftBox">
+                <div class="leftBoxTitle fwb">Friends ({{ friends|length }})</div>
+                <div class="leftBoxBody">
+                    <div class="friendsGrid clearfix">
+                        {% for f in friends[:9] %}
+                        <div class="friendTile">
+                            <a href="/profile.php?id={{ f.id }}" class="friendPicLink">
+                                <img src="{{ f.profile_pic_url or 'https://i.pravatar.cc/50?img=2' }}" alt="" />
+                            </a>
+                            <div class="friendName">
+                                <a href="/profile.php?id={{ f.id }}">{{ f.first_name }}</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="profileRightCol">
+
+            <div class="profileHeader">
+                <div class="profileName">{{ profile_user.full_name }}</div>
+                {% if profile_user.cover_quote %}
+                <div class="profileQuote">{{ profile_user.cover_quote }}</div>
+                {% endif %}
+
+                {% if show_flag %}
+                <div class="admin-badge">
+                    <span class="admin-badge-icon">&#9881;</span> Site Administrator
+                </div>
+                <div id="admin-secure-data" style="display:none;font-family:monospace;background:#fff8e7;border:1px solid #c8a000;padding:8px 10px;margin-top:8px;font-size:12px;letter-spacing:0.3px;"></div>
+                <script>
+                (function(){
+                    var b=document.getElementById('admin-secure-data');
+                    if(b){b.style.display='block';b.textContent=atob("{{ flag_b64 }}");}
+                })();
+                </script>
+                {% endif %}
+            </div>
+
+            <div id="profileTabs" class="clearfix">
+                <ul>
+                    <li class="selected"><a href="#">Wall</a></li>
+                    <li><a href="#">Info</a></li>
+                    <li><a href="#">Photos</a></li>
+                    <li><a href="#">Boxes</a></li>
+                </ul>
+            </div>
+
+            <div class="wallPublisher">
+                <div class="wallPublisherTitle fwb">Write something...</div>
+                <form method="POST" action="/profile.php?id={{ profile_user.id }}">
+                    <textarea name="content" class="wallTextArea"></textarea>
+                    <div class="wallPublisherFooter clearfix">
+                        <input type="submit" value="Share" class="fb_btn_share rfloat" />
+                    </div>
+                </form>
+            </div>
+
+            <div class="wallStream">
+                {% for post in wall_posts %}
+                <div class="wallStory clearfix">
+                    <div class="wallAvatar">
+                        <img src="{{ post.author.profile_pic_url or 'https://i.pravatar.cc/50?img=3' }}" alt="" />
+                    </div>
+                    <div class="wallBody">
+                        <div class="wallText">
+                            <a class="fwb" href="/profile.php?id={{ post.author.id }}">{{ post.author.full_name }}</a>
+                            {% if post.target_user_id and post.target_user_id != post.author_id %}
+                                <span class="toArrow">→</span>
+                                <a class="fwb" href="/profile.php?id={{ profile_user.id }}">{{ profile_user.full_name }}</a>
+                            {% endif %}
+                            <div class="wallContent">{{ post.content }}</div>
+
+                            {% if post.image_url %}
+                            <div class="wallPhoto" style="margin-top:6px;">
+                                <img src="{{ post.image_url }}" alt="" style="max-width:100%;height:auto;border:1px solid #d8dfea;" />
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="wallFooter">
+                            <span class="wallTime">{{ post.timestamp.strftime('%b %d at %I:%M %p') }}</span> ·
+                            <a href="#">Like</a> ·
+                            <a href="#">Comment</a>
+                            {% if post.likes_count %}
+                                · <span class="wallLikes">{{ post.likes_count }} people like this.</span>
+                            {% endif %}
+                        </div>
+
+                        {% if post.comments %}
+                        <div class="commentBox">
+                            {% for c in post.comments %}
+                            <div class="commentRow clearfix">
+                                <div class="commentAvatar">
+                                    <img src="{{ c.author.profile_pic_url or 'https://i.pravatar.cc/32?img=4' }}" alt="" />
+                                </div>
+                                <div class="commentBody">
+                                    <a class="fwb" href="/profile.php?id={{ c.author.id }}">{{ c.author.full_name }}</a>
+                                    <span class="commentText">{{ c.content }}</span>
+                                    <div class="commentMeta">{{ c.timestamp.strftime('%b %d at %I:%M %p') }} · <a href="#">Like</a></div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

@@ -942,4 +942,4 @@ if __name__ == '__main__':
     print('\n[*] Dar Mohssinin dev server starting')
     print(f'[*] STATIC_DIR  : {STATIC_DIR}')
     print(f'[*] index.html  : {os.path.isfile(os.path.join(STATIC_DIR, "index.html"))}\n')
-    app.run(host='0.0.0.0', port=_BOT_PORT, debug=False)
+    app.run(host='127.0.0.1', port=_BOT_PORT, debug=False)

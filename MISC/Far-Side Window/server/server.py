@@ -8,7 +8,7 @@ from pathlib import Path
 from common import DEFAULT_FLAG, recover_state, validate_command
 
 
-HOST = os.getenv("HOST", "0.0.0.0")
+HOST = os.getenv("HOST", "127.0.0.1")
 PORT = int(os.getenv("PORT", "31337"))
 FLAG = os.getenv("FLAG", DEFAULT_FLAG)
 DOWLINK_PATH = Path(os.getenv("DOWNLINK", "relay_downlink.bin"))
