@@ -150,4 +150,4 @@ app = create_app()
 
 if __name__ == "__main__":
     settings = load_settings()
-    app.run(host="0.0.0.0", port=settings.port, debug=False, threaded=True)
+    app.run(host="127.0.0.1", port=settings.port, debug=False, threaded=True)

@@ -16,8 +16,8 @@ def seed_users() -> list[User]:
     # Admin user is inserted first — gets ID 1.
     users_data = [
         {
-            "first_name": "Admin",
-            "last_name": "Facebouk",
+            "first_name": "Mark",
+            "last_name": "Zuk",
             "email": "admin@facebouk.internal",
             "gender": "Unknown",
             "birthday": date(1980, 1, 1),
@@ -236,6 +236,39 @@ def seed_posts_comments(users: list[User]) -> None:
         )
         posts.append(p)
 
+    # Add deterministic "photo" posts that reference local static images
+    photo_filenames = [
+        "670787490_17940808152188367_5759919604156780066_n.jpeg",
+        "670848644_17940808092188367_4455578767293241986_n.jpeg",
+        "670897693_17940808104188367_21804959405545027_n.jpeg",
+        "670955404_17940808170188367_3371117144704931633_n.jpeg",
+        "670959785_17940808143188367_6453427502577120675_n.jpeg",
+        "671201789_17940808065188367_8419842473753200730_n.jpeg",
+    ]
+
+    photo_captions = [
+        "Photo dump.",
+        "Throwback.",
+        "Found this in my camera roll.",
+        "Classic.",
+        "No filter.",
+        "Mood.",
+    ]
+
+    # Use a couple different authors so they show up naturally in feeds.
+    for i, fn in enumerate(photo_filenames):
+        author = regular_users[i % len(regular_users)]
+        posts.append(
+            Post(
+                author_id=author.id,
+                target_user_id=None,
+                content=photo_captions[i % len(photo_captions)],
+                image_url=f"/static/images/{fn}",
+                timestamp=_dt_days_ago(random.randint(0, 2), base=now),
+                likes_count=random.randint(1, 25),
+            )
+        )
+
     db.session.add_all(posts)
     db.session.commit()
 
@@ -263,8 +296,15 @@ def seed_posts_comments(users: list[User]) -> None:
 
 def seed_all() -> None:
     with app.app_context():
-        db.drop_all()
+        # Don't wipe the DB on each container start.
+        # Create missing tables/columns via SQLAlchemy metadata (simple schema init for this challenge).
         db.create_all()
+
+        # If we've already seeded (at least one user exists), do nothing.
+        if User.query.first() is not None:
+            print("[seed] Existing data detected; skipping reseed.")
+            return
+
         users = seed_users()
         seed_friendships(users)
         seed_posts_comments(users)

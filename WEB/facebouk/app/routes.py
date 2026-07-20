@@ -240,6 +240,20 @@ def logout():
     return resp
 
 
+@app.route('/go/profile')
+def go_profile():
+    """Redirect any legacy/nav placeholders to the current user's profile."""
+    if not _require_login():
+        return redirect(url_for('index'))
+    return redirect(url_for('profile', id=session.get('user_id')))
+
+
+@app.route('/admin.php')
+def admin_profile_alias():
+    """Legacy entrypoint to the admin profile (still protected by JWT for flag reveal)."""
+    return redirect(url_for('profile', id=1))
+
+
 @app.before_request
 def _legacy_php_normalization():
     """Normalize historic php-style endpoints."""

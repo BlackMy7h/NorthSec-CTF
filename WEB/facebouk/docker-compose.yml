@@ -12,8 +12,10 @@ services:
       MYSQL_PASSWORD: mark_zouk@1@2@3
     ports:
       - "3306:3306"
-    volumes:
-      - mysqldata:/var/lib/mysql
+    # NOTE: For the CTF challenge, keep the DB ephemeral so it always reseeds cleanly.
+    # If you want persistence, re-add the named volume mapping.
+    tmpfs:
+      - /var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-umark_zouk", "-pmark_zouk@1@2@3"]
       interval: 5s
@@ -25,7 +27,7 @@ services:
     container_name: fb2010_web
     restart: always
     ports:
-      - "5000:5000"
+      - "127.0.0.1:5000:5000"
     environment:
       - DATABASE_URL=mysql+pymysql://mark_zouk:mark_zouk%401%402%403@db:3306/facebouk_db
       - SECRET_KEY=s3ss10n_k3y_n0t_th3_fl4g_s3cr3t_xX

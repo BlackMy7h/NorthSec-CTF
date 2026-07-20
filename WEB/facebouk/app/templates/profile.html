@@ -117,6 +117,12 @@
                                 <a class="fwb" href="/profile.php?id={{ profile_user.id }}">{{ profile_user.full_name }}</a>
                             {% endif %}
                             <div class="wallContent">{{ post.content }}</div>
+
+                            {% if post.image_url %}
+                            <div class="wallPhoto" style="margin-top:6px;">
+                                <img src="{{ post.image_url }}" alt="" style="max-width:100%;height:auto;border:1px solid #d8dfea;" />
+                            </div>
+                            {% endif %}
                         </div>
                         <div class="wallFooter">
                             <span class="wallTime">{{ post.timestamp.strftime('%b %d at %I:%M %p') }}</span> ·

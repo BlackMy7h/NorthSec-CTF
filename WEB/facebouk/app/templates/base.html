@@ -22,13 +22,13 @@
             <ul>
                 <li><a href="/profile.php?id={{ current_user_id }}" class="navLink fwb">{{ current_user_name or 'Profile' }}</a></li>
                 <li><a href="/home.php" class="navLink">Home</a></li>
-                <li><a href="#" class="navLink">Account</a></li>
+                <li><a href="/go/profile" class="navLink">Account</a></li>
             </ul>
 
             <div id="jewelContainer">
-                <a href="#" class="jewelButton requests" title="Friend Requests"><span class="jewelCount"><span>2</span></span></a>
-                <a href="#" class="jewelButton messages" title="Messages"></a>
-                <a href="#" class="jewelButton notifications" title="Notifications"></a>
+                <a href="/go/profile" class="jewelButton requests" title="Friend Requests"><span class="jewelCount"><span>2</span></span></a>
+                <a href="/go/profile" class="jewelButton messages" title="Messages"></a>
+                <a href="/go/profile" class="jewelButton notifications" title="Notifications"></a>
             </div>
 
             <a href="{{ url_for('logout') }}" class="logout-link">Log Out</a>

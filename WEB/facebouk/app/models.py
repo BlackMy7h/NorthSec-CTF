@@ -62,6 +62,8 @@ class Post(db.Model):
     target_user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=True, index=True)
 
     content = db.Column(db.Text, nullable=False)
+    image_url = db.Column(db.String(512), nullable=True)  # Optional image path/URL for "Photo"-style posts.
+
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False, index=True)
     likes_count = db.Column(db.Integer, default=0, nullable=False)
 

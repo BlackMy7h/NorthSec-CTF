@@ -21,13 +21,13 @@
                 <ul>
                     <li><a href="/profile.php?id={{ current_user_id }}" class="navLink fwb">{{ current_user_name or 'Profile' }}</a></li>
                     <li><a href="/home.php" class="navLink">Home</a></li>
-                    <li><a href="#" class="navLink">Find Friends</a></li>
+                    <li><a href="/go/profile" class="navLink">Find Friends</a></li>
                 </ul>
 
                 <div id="jewelContainer">
-                    <a href="#" class="jewelButton requests" title="Friend Requests"><span class="jewelCount"><span>2</span></span></a>
-                    <a href="#" class="jewelButton messages" title="Messages"></a>
-                    <a href="#" class="jewelButton notifications" title="Notifications"></a>
+                    <a href="/go/profile" class="jewelButton requests" title="Friend Requests"><span class="jewelCount"><span>2</span></span></a>
+                    <a href="/go/profile" class="jewelButton messages" title="Messages"></a>
+                    <a href="/go/profile" class="jewelButton notifications" title="Notifications"></a>
                 </div>
 
                 <a href="{{ url_for('logout') }}" class="logout-link">Log Out</a>
@@ -43,16 +43,16 @@
                 <span class="fwb profile-name-left">{{ current_user_full_name }}</span>
             </div>
             <ul class="left-nav-list">
-                <li class="selected"><a href="#" class="item">News Feed</a></li>
-                <li><a href="#" class="item">Messages <span class="count">(1)</span></a></li>
-                <li><a href="#" class="item">Events</a></li>
-                <li><a href="#" class="item">Photos</a></li>
+                <li class="selected"><a href="/go/profile" class="item">News Feed</a></li>
+                <li><a href="/go/profile" class="item">Messages <span class="count">(1)</span></a></li>
+                <li><a href="/go/profile" class="item">Events</a></li>
+                <li><a href="/go/profile" class="item">Photos</a></li>
             </ul>
 
             <div class="left-nav-header">Apps</div>
             <ul class="left-nav-list">
-                <li><a href="#" class="item">FarmVille</a></li>
-                <li><a href="#" class="item">Mafia Wars</a></li>
+                <li><a href="/go/profile" class="item">FarmVille</a></li>
+                <li><a href="/go/profile" class="item">Mafia Wars</a></li>
             </ul>
         </div>
 
@@ -75,6 +75,43 @@
                 </form>
             </div>
 
+            <!-- Static fake photo posts (no DB required) -->
+            {% set static_photo_posts = [
+                ('lkhounanfir', '', '670787490_17940808152188367_5759919604156780066_n.jpeg', 'salt.png'),
+                ('sabo3ji9', '', '670848644_17940808192188367_4455578767293241986_n.jpeg', 'timssa7.png'),
+                ('is7a9lmntone', '', '670897693_17940808104188367_21804959405545027_n.jpeg', 'fofo.png'),
+                ('ouuuimblindedbythelights', '', '670955404_17940808170188367_3371117144704931633_n.jpeg', 'jbkjbn.png'),
+                ('na9na9a', '', '670959785_17940808143188367_6453427502577120675_n.jpeg', 'jbkjbkjx.png'),
+                ('steepo', '', '671201789_17940808065188367_8419842473753200730_n.jpeg', 'nknon.png'),
+                ('dambenzelian', '', '9682178_orig.jpg', 'gkd.png'),
+                ('terententen', '', '7609289_orig.jpg', 'ioopi.png'),
+                ('inssanMrta7', '', '6607159_orig.jpg', 'Pasted image.png'),
+                ('sp7lo', '', '2hlzoc.jpg', 'timssa7.png'),
+                ('sanka7il', '', '427563_409937755720322_1692258928_n.jpg', 'salt.png'),
+            ] %}
+
+            {% for author, caption, filename, pdp in static_photo_posts %}
+            <div class="feed-story clearfix fb-photo-story">
+                <div class="story-avatar">
+                    <img src="{{ url_for('static', filename='images/pdp/' ~ pdp) }}" alt="" />
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <span class="fwb story-author">{{ author }}</span>
+                        <div class="feedContent">{{ caption }}</div>
+                        <div class="fb-photo-single">
+                            <img src="{{ url_for('static', filename='images/' ~ filename) }}" alt="" />
+                        </div>
+                    </div>
+                    <div class="story-footer">
+                        <span class="story-time">just now</span> ·
+                        <a href="#" class="story-action">Like</a> ·
+                        <a href="#" class="story-action">Comment</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
             <div id="newsFeedStream">
                 {% for post in feed_posts %}
                 <div class="feed-story clearfix">
@@ -88,6 +125,12 @@
                                 → <a href="/profile.php?id={{ post.target_user.id }}" class="fwb story-author">{{ post.target_user.full_name }}</a>
                             {% endif %}
                             <div class="feedContent">{{ post.content }}</div>
+
+                            {% if post.image_url %}
+                            <div class="feedPhoto" style="margin-top:6px;">
+                                <img src="{{ post.image_url }}" alt="" style="max-width:100%;height:auto;border:1px solid #d8dfea;" />
+                            </div>
+                            {% endif %}
                         </div>
                         <div class="story-footer">
                             <span class="story-time">{{ post.timestamp.strftime('%b %d at %I:%M %p') }}</span> ·
